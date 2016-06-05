@@ -11,9 +11,25 @@ app = Flask(__name__)
 app.debug = True
 
 
-@app.route('/')
+@app.route('/', methods=["GET"])
 def index():
     return render_template('index.html')
+
+@app.route('/base', methods=["GET"])
+def base_index():
+    return render_template('base_index.html')
+
+@app.route('/ue', methods=["GET"])
+def ue_index():
+    return render_template('ue_index.html')
+
+@app.route('/ids', methods=["GET"])
+def ids_index():
+    return render_template('ids_index.html')
+
+@app.route('/hhdr', methods=["GET"])
+def hhdr_index():
+    return render_template('hhdr_index.html', remote_addr=request.remote_addr, headers=request.headers.items())
 
 @app.route('/ids/preview', methods=['POST'])
 def ids_preview():

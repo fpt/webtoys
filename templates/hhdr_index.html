@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Web tools</title>
+  <title>HTTP Headers</title>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link href="static/css/bootstrap.min.css" rel="stylesheet" media="screen">
@@ -11,27 +11,25 @@
 <body>
 
 <div class="container">
-  <h1>Web tools</h1>
+  <h1>HTTP Headers</h1>
   <script src="http://code.jquery.com/jquery.js"></script>
   <script src="static/js/bootstrap.min.js"></script>
 
   <div>
-    <a href="/ue">Url Encode/Decode</a>
+    {{ remote_addr }}
   </div>
 
   <div>
-    <a href="/base">Base64 Encoder/Decoder</a>
+    <dl>
+      {% for key, value in headers %}
+        <dt>{{ key }}</dt>
+        <dd>{{ value }}</dd>
+      {% endfor %}
+    </dl>
   </div>
-
-  <div>
-    <a href="/hhdr">HTTP Request Header</a>
-  </div>
-
-  <div>
-    <a href="/ids">ID generator</a>
-  </div>
-
 </div>
+
+</script>
 
 </body>
 </html>

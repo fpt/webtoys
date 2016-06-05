@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Base64 Encoder/Decoder</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link href="static/css/bootstrap.min.css" rel="stylesheet" media="screen">
+  <link href="static/css/bootstrap-theme.min.css" rel="stylesheet" media="screen">
+</head>
+
+<body>
+
+<div class="container">
+  <h1>Base64 Encoder/Decoder</h1>
+  <script src="http://code.jquery.com/jquery.js"></script>
+  <script src="static/js/bootstrap.min.js"></script>
+
+  <form>
+    <div class="input-group">
+      <label for="plain" class="form-control-label">Plain</label>
+      <input name="plain" class="form-control">
+    </div>
+    <div class="input-group">
+      <label for="encoded" class="form-control-label">Encoded</label>
+      <input name="encoded" class="form-control">
+    </div>
+    <div class="input-group">
+      <button name="encode" class="btn btn-primary">Encode</button>
+      <button name="decode" class="btn btn-primary">Decode</button>
+    </div>
+  </form>
+</div>
+
+<script type="text/javascript">
+
+$('button[name="encode"]').bind('click', function(event){
+  var plain = $('input[name=plain]').val()
+  var encoded = encodeURI(plain);
+  $('input[name=encoded]').val(encoded);
+  event.preventDefault();
+});
+
+$('button[name="decode"]').bind('click', function(event){
+  var encoded = $('input[name=encoded]').val()
+  var plain = decodeURI(encoded);
+  $('input[name=plain]').val(plain)
+  event.preventDefault();
+});
+
+</script>
+
+</body>
+</html>
