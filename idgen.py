@@ -14,6 +14,9 @@ class IdGen:
     def __init__(self, baseval = 36):
         self.baseVal = baseval
 
+    def checkParam(self, id_len, id_cnt):
+        return id_cnt > self.baseVal ** id_len
+
     def getId(self, l):
         s = ''
         for i in range(l): 
@@ -51,7 +54,7 @@ def main():
     else:
         g = IdGen(62)
 
-    if id_cnt > g.baseVal ** id_len:
+    if g.checkParam(id_len, id_cnt):
         sys.stderr.write("Too short!!\n")
         sys.exit(1)
 

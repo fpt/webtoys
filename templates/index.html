@@ -1,23 +1,90 @@
+<!DOCTYPE html>
 <html>
 <head>
-    <title>Unique ID generator</title>
+  <title>Unique ID generator</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link href="static/css/bootstrap.min.css" rel="stylesheet" media="screen">
+  <link href="static/css/bootstrap-theme.min.css" rel="stylesheet" media="screen">
 </head>
+
 <body>
-    <h3>Unique ID generator</h3>
-    <form action="/generate" method="post">
-        <input type="radio" name="base" value="36" checked="checked">Base36
-        <input type="radio" name="base" value="62">Base62
-        <legend for="idlen">Length</legend><select name="idlen">
-            <option value="4">4</option>
-            <option value="5">5</option>
-            <option value="6">6</option>
-            <option value="7" selected="">7</option>
-            <option value="8">8</option>
-            <option value="9">9</option>
-            <option value="10">10</option>
-        </select>
-        <legend for="idcnt">Count</legend><input name="idcnt" value="10">
-        <input type="submit" value="送信する">
-    </form>
+
+<div class="container">
+  <h1>Unique ID generator</h1>
+  <script src="http://code.jquery.com/jquery.js"></script>
+  <script src="static/js/bootstrap.min.js"></script>
+
+  <form action="/ids/download" method="post">
+    <div class="input-group">
+      <label class="form-control-label">Format</label>
+      <div class="radio">
+        <label>
+          <input type="radio" class="form-control" name="base" value="36" checked="checked">
+          Base36
+        </label>
+      </div>
+      <div class="radio">
+        <label>
+          <input type="radio" class="form-control" name="base" value="62">
+          Base62
+        </label>
+      </div>
+    </div>
+    <div class="input-group">
+      <label for="idlen" class="form-control-label">Length</label>
+      <select name="idlen" class="form-control">
+        <option value="4">4</option>
+        <option value="5">5</option>
+        <option value="6">6</option>
+        <option value="7" selected="">7</option>
+        <option value="8">8</option>
+        <option value="9">9</option>
+        <option value="10">10</option>
+        <option value="11">11</option>
+        <option value="12">12</option>
+      </select>
+    </div>
+    <div class="input-group">
+      <label for="idcnt" class="form-control-label">Count</label>
+      <input name="idcnt" class="form-control" value="10">
+    </div>
+    <div class="input-group">
+      <button type="submit" class="btn btn-primary">Download</button>
+    </div>
+  </form>
+
+  <div>
+    <label for="ids_preview" class="form-control-label">Preview</label>
+    <textarea name="ids_preview" style="font-family:courier; width:10em; height:10em;"></textarea>
+  </div>
+</div>
+
+<script type="text/javascript">
+function updatePreview(){
+  var base = $('input[name=base]:checked').val()
+  var idlen = $('select[name="idlen"]').val();
+  $.post("/ids/preview",
+    {base: base, idlen: idlen},
+    function(ids){
+      $('textarea[name="ids_preview"]').val(ids);
+    });
+}
+
+$('select[name="idlen"]').bind('change', function(event){
+  updatePreview();
+  event.preventDefault();
+});
+$('input[name="base"]:radio').bind('change', function(event){
+  updatePreview();
+  event.preventDefault();
+});
+
+$(document).ready(function(){
+  updatePreview();
+});
+
+</script>
+
 </body>
 </html>
