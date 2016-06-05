@@ -7,6 +7,8 @@ from flask import request
 from flask import Response
 from idgen import IdGen, makeIdSet
 
+import socket
+
 app = Flask(__name__)
 app.debug = True
 
@@ -29,11 +31,21 @@ def ids_index():
 
 @app.route('/hhdr', methods=["GET"])
 def hhdr_index():
-    return render_template('hhdr_index.html', remote_addr=request.remote_addr, headers=request.headers.items())
+    remote_addr = request.remote_addr
+    remote_host = None
+    try:
+        remote_host = socket.gethostbyaddr(remote_addr)
+    except:
+        pass
+
+    return render_template('hhdr_index.html',
+            remote_addr=remote_addr,
+            remote_host=remote_host,
+            headers=request.headers.items() )
 
 @app.route('/ids/preview', methods=['POST'])
 def ids_preview():
-    preview_cnt = 10
+    preview_cnt = 5
     base = int(request.form['base'])
     idlen = int(request.form['idlen'])
     g = IdGen(base)
@@ -47,7 +59,7 @@ def ids_download():
     idcnt = int(request.form['idcnt'])
     g = IdGen(base)
 
-    if g.checkParam(idlen, idcnt):
+    if g.checkParam(idlen, idcnt) or idlen > 100 or idcnt > 1000000:
         return Response("Invalid parameter.", mimetype='text/plain')
 
     ids = makeIdSet(g, idlen, idcnt)
