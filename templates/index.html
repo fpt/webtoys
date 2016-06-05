@@ -5,6 +5,7 @@
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="HTTP header, Base64, URL encode/decode, Unicode escape/unescape, ID generator">
   <link href="static/css/bootstrap.min.css" rel="stylesheet" media="screen">
   <link href="static/css/bootstrap-theme.min.css" rel="stylesheet" media="screen">
 </head>
@@ -45,17 +46,22 @@
     </div>
     <div class="col-md-4">
       <h3>URL Encode/Decode</h3>
-      <p>Check HTTP Request your browser is sending.</p>
-      <p><a class="btn btn-primary" href="/ue" role="button">Go</a></p>
+      <p>Apply Javascript encodeURI() or decodeURI()</p>
+      <p><a class="btn btn-primary" href="/urle" role="button">Go</a></p>
+    </div>
+    <div class="col-md-4">
+      <h3>Unicode Escape/Unescape</h3>
+      <p>Apply Javascript escape() or unescape()</p>
+      <p><a class="btn btn-primary" href="/unie" role="button">Go</a></p>
     </div>
     <div class="col-md-4">
       <h3>Base64 Encoder/Decoder</h3>
-      <p>Check HTTP Request your browser is sending.</p>
+      <p>Apply Javascript window.atob/bota.</p>
       <p><a class="btn btn-primary" href="/base" role="button">Go</a></p>
     </div>
     <div class="col-md-4">
       <h3>ID generator</h3>
-      <p>Check HTTP Request your browser is sending.</p>
+      <p>Generate random IDs.</p>
       <p><a class="btn btn-primary" href="/ids" role="button">Go</a></p>
     </div>
   </div>

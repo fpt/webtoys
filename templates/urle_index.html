@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Base64 Encoder/Decoder</title>
+  <title>URL Encoder/Decoder</title>
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -13,14 +13,14 @@
 
 <ol class="breadcrumb">
   <li><a href="/">Top</a></li>
-  <li class="active">Base64 Encoder/Decoder</li>
+  <li class="active">URL Encoder/Decoder</li>
 </ol>
 
 <div class="container">
   <script src="http://code.jquery.com/jquery.js"></script>
   <script src="static/js/bootstrap.min.js"></script>
 
-  <h1>Base64 Encoder/Decoder</h1>
+  <h1>URL Encoder/Decoder</h1>
 
   <div class="panel panel-default">
     <div class="panel-heading">Usage</div>
@@ -32,11 +32,11 @@
   <form role="form">
     <div class="form-group">
       <label for="plain" class="form-control-label">Plain</label>
-      <textarea name="plain" class="form-control" rows="10"></textarea>
+      <input name="plain" class="form-control">
     </div>
     <div class="form-group">
       <label for="encoded" class="form-control-label">Encoded</label>
-      <textarea name="encoded" class="form-control" rows="10"></textarea>
+      <input name="encoded" class="form-control">
     </div>
     <div class="form-group">
       <button name="encode" class="btn btn-primary">Encode</button>
@@ -48,16 +48,16 @@
 <script type="text/javascript">
 
 $('button[name="encode"]').bind('click', function(event){
-  var plain = $('textarea[name=plain]').val()
-  var encoded = window.btoa(plain);
-  $('textarea[name=encoded]').val(encoded);
+  var plain = $('input[name=plain]').val()
+  var encoded = encodeURI(plain);
+  $('input[name=encoded]').val(encoded);
   event.preventDefault();
 });
 
 $('button[name="decode"]').bind('click', function(event){
-  var encoded = $('textarea[name=encoded]').val()
-  var plain = window.atob(encoded);
-  $('textarea[name=plain]').val(plain)
+  var encoded = $('input[name=encoded]').val()
+  var plain = decodeURI(encoded);
+  $('input[name=plain]').val(plain)
   event.preventDefault();
 });
 

@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Base64 Encoder/Decoder</title>
+  <title>Unicode Escape/Unescape</title>
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -13,14 +13,14 @@
 
 <ol class="breadcrumb">
   <li><a href="/">Top</a></li>
-  <li class="active">URL Encoder/Decoder</li>
+  <li class="active">Unicode Escape/Unescape</li>
 </ol>
 
 <div class="container">
   <script src="http://code.jquery.com/jquery.js"></script>
   <script src="static/js/bootstrap.min.js"></script>
 
-  <h1>URL Encoder/Decoder</h1>
+  <h1>Unicode Escape/Unescape</h1>
 
   <div class="panel panel-default">
     <div class="panel-heading">Usage</div>
@@ -29,34 +29,34 @@
     </div>
   </div>
 
-  <form>
-    <div class="input-group">
+  <form role="form">
+    <div class="form-group">
       <label for="plain" class="form-control-label">Plain</label>
       <input name="plain" class="form-control">
     </div>
-    <div class="input-group">
-      <label for="encoded" class="form-control-label">Encoded</label>
-      <input name="encoded" class="form-control">
+    <div class="form-group">
+      <label for="escaped" class="form-control-label">Encoded</label>
+      <input name="escaped" class="form-control">
     </div>
-    <div class="input-group">
-      <button name="encode" class="btn btn-primary">Encode</button>
-      <button name="decode" class="btn btn-primary">Decode</button>
+    <div class="form-group">
+      <button name="escape" class="btn btn-primary">Escape</button>
+      <button name="unescape" class="btn btn-primary">Unescape</button>
     </div>
   </form>
 </div>
 
 <script type="text/javascript">
 
-$('button[name="encode"]').bind('click', function(event){
+$('button[name="escape"]').bind('click', function(event){
   var plain = $('input[name=plain]').val()
-  var encoded = encodeURI(plain);
-  $('input[name=encoded]').val(encoded);
+  var escaped = escape(plain);
+  $('input[name=escaped]').val(escaped);
   event.preventDefault();
 });
 
-$('button[name="decode"]').bind('click', function(event){
-  var encoded = $('input[name=encoded]').val()
-  var plain = decodeURI(encoded);
+$('button[name="unescape"]').bind('click', function(event){
+  var escaped = $('input[name=escaped]').val()
+  var plain = unescape(escaped);
   $('input[name=plain]').val(plain)
   event.preventDefault();
 });

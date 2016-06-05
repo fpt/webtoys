@@ -17,31 +17,43 @@ app.debug = True
 def index():
     return render_template('index.html')
 
-@app.route('/base', methods=["GET"])
-def base_index():
-    return render_template('base_index.html')
-
-@app.route('/ue', methods=["GET"])
-def ue_index():
-    return render_template('ue_index.html')
-
-@app.route('/ids', methods=["GET"])
-def ids_index():
-    return render_template('ids_index.html')
-
 @app.route('/hhdr', methods=["GET"])
 def hhdr_index():
-    remote_addr = request.remote_addr
+
+    headers = { k : v for (k, v) in request.headers.items() }
+
+    if 'DYNO' in os.environ:
+        remote_addr = headers['X-Forwarded-For']
+        headers = { k: v for k, v in headers.iteritems() if not k.startswith('X-Forwarded-') }
+    else:
+        remote_addr = request.remote_addr
+
     remote_host = None
     try:
-        remote_host = socket.gethostbyaddr(remote_addr)
+        remote_host = socket.gethostbyaddr(remote_addr)[0]
     except:
         pass
 
     return render_template('hhdr_index.html',
             remote_addr=remote_addr,
             remote_host=remote_host,
-            headers=request.headers.items() )
+            headers=headers )
+
+@app.route('/base', methods=["GET"])
+def base_index():
+    return render_template('base_index.html')
+
+@app.route('/urle', methods=["GET"])
+def urle_index():
+    return render_template('urle_index.html')
+
+@app.route('/unie', methods=["GET"])
+def unie_index():
+    return render_template('unie_index.html')
+
+@app.route('/ids', methods=["GET"])
+def ids_index():
+    return render_template('ids_index.html')
 
 @app.route('/ids/preview', methods=['POST'])
 def ids_preview():

@@ -35,7 +35,7 @@
     <div class="panel-heading">HTTP Headers</div>
     <div class="panel-body">
       <dl class="dl-horizontal">
-        {% for key, value in headers %}
+        {% for key, value in headers.items() %}
           <dt class="col-sm-3">{{ key }}</dt>
           <dd class="col-sm-9">{{ value|default('(Empty)', true) }}</dd>
         {% endfor %}
