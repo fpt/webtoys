@@ -5,7 +5,8 @@ import os
 from flask import Flask, render_template
 from flask import request
 from flask import Response
-from idgen import IdGen, makeIdSet
+from idgen import IdGen
+from xmlbt import XmlBt
 
 import socket
 
@@ -51,6 +52,17 @@ def urle_index():
 def unie_index():
     return render_template('unie_index.html')
 
+@app.route('/xmlbt', methods=["GET"])
+def xmlbt_index():
+    return render_template('xmlbt_index.html')
+
+@app.route('/xmlbt/beautify', methods=['POST'])
+def xmlbt_beautify():
+    orig = request.form['original']
+    b = XmlBt()
+    r = b.beautify(orig)
+    return Response(r, mimetype='text/plain')
+
 @app.route('/ids', methods=["GET"])
 def ids_index():
     return render_template('ids_index.html')
@@ -61,8 +73,8 @@ def ids_preview():
     base = int(request.form['base'])
     idlen = int(request.form['idlen'])
     g = IdGen(base)
-    ids = makeIdSet(g, idlen, preview_cnt)
-    return "\n".join(ids)
+    ids = g.makeIdSet(idlen, preview_cnt)
+    return Response("\n".join(ids), mimetype='text/plain')
 
 @app.route('/ids/download', methods=['POST'])
 def ids_download():
@@ -74,7 +86,7 @@ def ids_download():
     if g.checkParam(idlen, idcnt) or idlen > 100 or idcnt > 1000000:
         return Response("Invalid parameter.", mimetype='text/plain')
 
-    ids = makeIdSet(g, idlen, idcnt)
+    ids = g.makeIdSet(idlen, idcnt)
 
     headers = { "Content-Disposition" : "attachment; filename=generated_ids.txt" }
     def generate():

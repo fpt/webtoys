@@ -5,3 +5,4 @@ gunicorn==19.6.0
 Jinja2==2.8
 Pykka==1.2.1
 python-dateutil==2.4.2
+yattag==1.6.0

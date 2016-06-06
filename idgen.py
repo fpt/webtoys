@@ -23,20 +23,20 @@ class IdGen:
             s += self.base62chars[random.randint(0, self.baseVal - 1)]
         return s
 
-def makeIdSet(g, id_len, id_cnt):
-    s = set()
+    def makeIdSet(self, id_len, id_cnt):
+        s = set()
 
-    cnt = 0
+        cnt = 0
 
-    while True:
-        s.add(g.getId(id_len))
-        cnt += 1
-        if len(s) >= id_cnt:
-            break
+        while True:
+            s.add(self.getId(id_len))
+            cnt += 1
+            if len(s) >= id_cnt:
+                break
 
-    sys.stderr.write("cnt : %d\n" % (cnt,))
+        sys.stderr.write("cnt : %d\n" % (cnt,))
 
-    return s
+        return s
 
 def main():
     parser = ArgumentParser()
@@ -58,7 +58,7 @@ def main():
         sys.stderr.write("Too short!!\n")
         sys.exit(1)
 
-    s = makeIdSet(g, id_len, id_cnt)
+    s = g.makeIdSet(id_len, id_cnt)
 
     for i in s:
         print(i)
