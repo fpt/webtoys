@@ -1,0 +1,12 @@
+{
+  "name": "Push Notification Demo",
+  "short_name": "Push Notification Demo",
+  "icons": [{
+    "src": "http://placehold.it/192x192",
+    "sizes": "192x192",
+    "type": "image/png"
+  }],
+  "start_url": "/index.html",
+  "display": "standalone",
+  "gcm_sender_id": "fujimoto-app1"
+}
