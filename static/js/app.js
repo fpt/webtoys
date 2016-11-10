@@ -2,9 +2,9 @@
 
 document.addEventListener('DOMContentLoaded', e => {
 
-  navigator.serviceWorker.register('service-worker.js').then(registration => {
+  navigator.serviceWorker.register('/static/js/service-worker.js').then(registration => {
 
-    registration.pushManager.subscribe().then(subscription => {
+    registration.pushManager.subscribe({userVisibleOnly:true}).then(subscription => {
       console.log('GCM engpoint is: ', subscription.endpoint);
     });
 
