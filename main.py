@@ -94,6 +94,11 @@ def ids_download():
             yield d + '\n'
     return Response(generate(), headers=headers, mimetype='text/plain')
 
+# Let's encrypt
+@app.route('/.well-known/acme-challenge/9Z4E_EJmMOaZm7sOoWNVQxSGxjyURPCdlBJb1vA8_Uo', methods=["GET"])
+def letsencrypt():
+    return '9Z4E_EJmMOaZm7sOoWNVQxSGxjyURPCdlBJb1vA8_Uo.rq8s6XKxE74WK5RjTi-jsdMPGIEuiNVG9oIhE8IGgNI'
+
 if __name__ == '__main__':
     port = int(os.environ.get("PORT", 5000))
     app.run(host="0.0.0.0", port=port)
