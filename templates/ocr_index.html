@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>OCR</title>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link href="static/css/bootstrap.min.css" rel="stylesheet" media="screen">
+  <link href="static/css/bootstrap-theme.min.css" rel="stylesheet" media="screen">
+</head>
+
+<body>
+
+<ol class="breadcrumb">
+  <li><a href="/">Top</a></li>
+  <li class="active">OCR</li>
+</ol>
+
+<div class="container">
+  <script src="http://code.jquery.com/jquery.js"></script>
+  <script src="static/js/bootstrap.min.js"></script>
+
+  <h1>OCR</h1>
+
+  <div class="panel panel-default">
+    <div class="panel-heading">Usage</div>
+    <div class="panel-body">
+      Select an image.
+    </div>
+  </div>
+
+  <form id="file_form" action="/ocr/process" method="post" class="form-horizontal">
+    <div class="form-group">
+      <label for="idlen" class="control-label col-xs-2">Length</label>
+      <div class="col-xs-5">
+        <input id="myFileInput" type="file" accept="image/*;capture=camera">
+<script>
+var myInput = document.getElementById('myFileInput');
+
+function sendPic() {
+    var file = myInput.files[0];
+
+    // Send file here either by adding it to a `FormData` object 
+    // and sending that via XHR, or by simply passing the file into 
+    // the `send` method of an XHR instance.
+
+    var formdata = new FormData();
+    formdata.append('file', file);
+    console.log(formdata);
+
+    var xhr = new XMLHttpRequest();
+    xhr.onreadystatechange = function() {
+        if (xhr.readyState == 4 && xhr.status == 200) {
+            //console.log(xhr.responseText)
+            obj = JSON.parse(xhr.responseText);
+            $('#ocr_result').text(obj.results.join("\n"))
+        }
+    };
+    xhr.open("POST", "ocr/process", true);
+    xhr.send(formdata);
+    xhr.onload = function(e) {
+      console.log(e)
+    };
+}
+
+myInput.addEventListener('change', sendPic, false);
+</script>
+      </div>
+    </div>
+    <div class="form-group">
+      <label class="control-label col-xs-2">Result</label>
+      <div class="col-xs-5">
+        <textarea id="ocr_result" style="font-family:courier; width:30em; height:16em; background-color:silver;" readonly=""></textarea>
+      </div>
+    </div>
+  </form>
+</div>
+
+<script type="text/javascript">
+
+$(document).ready(function(){
+});
+
+</script>
+
+</body>
+</html>
