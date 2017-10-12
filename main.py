@@ -29,7 +29,7 @@ def hhdr_index():
 
     if 'DYNO' in os.environ:
         remote_addr = headers['X-Forwarded-For']
-        headers = { k: v for k, v in headers.iteritems() if not k.startswith('X-Forwarded-') }
+        headers = { k: v for k, v in headers.items() if not k.startswith('X-Forwarded-') }
     else:
         remote_addr = request.remote_addr
 
