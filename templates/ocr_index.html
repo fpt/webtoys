@@ -31,13 +31,13 @@
 
   <form id="file_form" action="/ocr/process" method="post" class="form-horizontal">
     <div class="form-group">
-      <label for="idlen" class="control-label col-xs-2">Length</label>
+      <label for="myFileInput" class="control-label col-xs-2">Select an image</label>
       <div class="col-xs-5">
         <input id="myFileInput" type="file" accept="image/*;capture=camera">
 <script>
 var myInput = document.getElementById('myFileInput');
 
-function sendPic() {
+function sendPic(e) {
     var file = myInput.files[0];
 
     // Send file here either by adding it to a `FormData` object 
@@ -61,6 +61,15 @@ function sendPic() {
     xhr.onload = function(e) {
       console.log(e)
     };
+}
+
+function addPreview() {
+    var img = document.createElement( 'img' );
+    img.setAttribute('src',  e.target.result);
+    img.setAttribute('width', '150px');
+    img.setAttribute('title',  file.name);
+    // imgタグを$previeの中に追加
+    $preview.appendChild(img);  
 }
 
 myInput.addEventListener('change', sendPic, false);

@@ -47,7 +47,7 @@ class Ocr():
         texts = []
         if 'responses' not in resp:
             texts.append('error: no response')
-            texts.append(resp)
+            texts.append(json.dump(resp))
             return { 'results': texts }
 
         for re in resp['responses']:
