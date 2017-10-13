@@ -51,8 +51,11 @@ class Ocr():
             return { 'results': texts }
 
         for re in resp['responses']:
-            txt = re['fullTextAnnotation']['text']
-            texts.append(txt)
+            if 'fullTextAnnotation' in re:
+              txt = re['fullTextAnnotation']['text']
+              texts.append(txt)
+            else:
+              texts.append(json.dump(re))
         return { 'results': texts }
 
 if __name__ == '__main__':
