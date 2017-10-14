@@ -47,7 +47,7 @@ class Ocr():
         texts = []
         if 'responses' not in resp:
             texts.append('error: no response')
-            texts.append(json.dump(resp))
+            texts.append(json.dumps(resp))
             return { 'results': texts }
 
         for re in resp['responses']:
@@ -55,7 +55,7 @@ class Ocr():
               txt = re['fullTextAnnotation']['text']
               texts.append(txt)
             else:
-              texts.append(json.dump(re))
+              texts.append(json.dumps(re))
         return { 'results': texts }
 
 if __name__ == '__main__':
