@@ -2,14 +2,16 @@
 # coding:utf-8
 
 import os
-from flask import Flask, render_template, make_response, jsonify
+from flask import Flask, render_template, make_response, jsonify, send_file
 from flask import request
 from flask import Response
-from idgen import IdGen
-from xmlbt import XmlBt
+from io import BytesIO
+from zipfile import ZipFile
 
 import socket
 
+from src.idgen import IdGen
+from src.xmlbt import XmlBt
 from src.ocr import Ocr
 from src.pdf import PdfTxt
 
@@ -49,19 +51,23 @@ def hhdr_index():
 def base_index():
     return render_template('base_index.html')
 
+
 # url encode
 @app.route('/urle', methods=["GET"])
 def urle_index():
     return render_template('urle_index.html')
 
+
 @app.route('/unie', methods=["GET"])
 def unie_index():
     return render_template('unie_index.html')
+
 
 # xml beautify
 @app.route('/xmlbt', methods=["GET"])
 def xmlbt_index():
     return render_template('xmlbt_index.html')
+
 
 @app.route('/xmlbt/beautify', methods=['POST'])
 def xmlbt_beautify():
@@ -70,10 +76,12 @@ def xmlbt_beautify():
     r = b.beautify(orig)
     return Response(r, mimetype='text/plain')
 
+
 # ids
 @app.route('/ids', methods=["GET"])
 def ids_index():
     return render_template('ids_index.html')
+
 
 @app.route('/ids/preview', methods=['POST'])
 def ids_preview():
@@ -83,6 +91,7 @@ def ids_preview():
     g = IdGen(base)
     ids = g.makeIdSet(idlen, preview_cnt)
     return Response("\n".join(ids), mimetype='text/plain')
+
 
 @app.route('/ids/download', methods=['POST'])
 def ids_download():
@@ -102,10 +111,12 @@ def ids_download():
             yield d + '\n'
     return Response(generate(), headers=headers, mimetype='text/plain')
 
+
 # OCR
 @app.route('/ocr', methods=["GET"])
 def ocr_index():
     return render_template('ocr_index.html')
+
 
 @app.route('/ocr/process', methods=["POST"])
 def ocr_process():
@@ -123,10 +134,12 @@ def ocr_process():
         res = ocr.process(file.stream)
         return jsonify(res)
 
+
 # PDF to text
 @app.route('/pdftxt', methods=["GET"])
 def pdftxt_index():
     return render_template('pdftxt_index.html')
+
 
 @app.route('/pdftxt/preview', methods=["POST"])
 def pdftxt_preview():
@@ -143,6 +156,7 @@ def pdftxt_preview():
         pdf = PdfTxt()
         res = pdf.preview(file.stream)
         return jsonify(res)
+
 
 @app.route('/pdftxt/convert', methods=["POST"])
 def pdftxt_convert():
@@ -162,10 +176,12 @@ def pdftxt_convert():
         pdf = PdfTxt()
         txt = pdf.convert(file.stream)
 
-        response = make_response(txt)
-        response.headers['Content-Type'] = 'text/plain'
-        response.headers['Content-Disposition'] = 'attachment; filename=' + fn
-        return response
+        memory_file = BytesIO()
+        with ZipFile(memory_file, 'w') as zf:
+            zf.writestr(fn, txt)
+        memory_file.seek(0)
+        return send_file(memory_file, attachment_filename='pdftxt.zip', as_attachment=True)
+
 
 # Let's encrypt
 @app.route('/.well-known/acme-challenge/9Z4E_EJmMOaZm7sOoWNVQxSGxjyURPCdlBJb1vA8_Uo', methods=["GET"])

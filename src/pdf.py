@@ -79,3 +79,15 @@ class PdfTxt:
                 if isinstance(l, LTTextBoxHorizontal):
                     texts.append(l.get_text())
         return "\n".join(texts)
+
+def main():
+    parser = ArgumentParser()
+    parser.add_argument('query', nargs='?', help='query string')
+    args = parser.parse_args()
+
+    o = PdfTxt()
+    r = o.process(filename)
+    print(r)
+
+if __name__ == '__main__':
+    main()
