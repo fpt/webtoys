@@ -14,23 +14,24 @@
 
 <ol class="breadcrumb">
   <li><a href="/">Top</a></li>
-  <li class="active">PDF to Text</li>
+  <li class="active">PDF converter</li>
 </ol>
 
 <div class="container">
   <script src="http://code.jquery.com/jquery.js"></script>
   <script src="static/js/bootstrap.min.js"></script>
 
-  <h1>PDF to Text</h1>
+  <h1>PDF to Word/Text converter</h1>
 
   <div class="panel panel-default">
     <div class="panel-heading">Usage</div>
     <div class="panel-body">
-      This tool extracts text from PDF file. Choose a PDF file to process.
+      This tool converts from PDF file to Word(docx) or Text file. Choose a PDF file to process.
+      <p>NOTE: Currently page range is limited to 0-9.</p>
     </div>
   </div>
 
-  <form enctype="multipart/form-data" action="/pdftxt/convert" method="post" class="form-horizontal">
+  <form enctype="multipart/form-data" action="/pdfconv/convert" method="post" class="form-horizontal">
     <div class="form-group">
       <label for="idlen" class="control-label col-xs-2">Length</label>
       <div class="col-xs-5">
@@ -54,10 +55,10 @@ function sendPic() {
         if (xhr.readyState == 4 && xhr.status == 200) {
             //console.log(xhr.responseText)
             obj = JSON.parse(xhr.responseText);
-            $('#pdftxt_result').text(obj.results.join("\n"))
+            $('#pdftxt_result').text(obj.result)
         }
     };
-    xhr.open("POST", "pdftxt/preview", true);
+    xhr.open("POST", "pdfconv/preview", true);
     xhr.send(formdata);
     xhr.onload = function(e) {
       console.log(e)
@@ -73,6 +74,14 @@ myInput.addEventListener('change', sendPic, false);
       <label class="control-label col-xs-2">Preview</label>
       <div class="col-xs-5">
         <textarea id="pdftxt_result" style="font-family:courier; width:20em; height:8em; background-color:silver;" readonly=""></textarea>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label class="control-label col-xs-2">Output</label>
+      <div class="col-xs-offset-2 col-xs-10">
+        <input type="radio" name="file_fmt" checked="" value="docx">Word (docx)</input><br>
+        <input type="radio" name="file_fmt" value="text">Text</input><br>
       </div>
     </div>
 

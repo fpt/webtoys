@@ -50,6 +50,7 @@ class Ocr():
             texts.append(json.dumps(resp))
             return { 'results': texts }
 
+        print(resp)
         for re in resp['responses']:
             if 'fullTextAnnotation' in re:
               txt = re['fullTextAnnotation']['text']

@@ -1,22 +1,24 @@
 #!/usr/bin/env python
 # coding:utf-8
 
-import os
+import sys,os
+import socket
 from flask import Flask, render_template, make_response, jsonify, send_file
 from flask import request
 from flask import Response
 from io import BytesIO
 from zipfile import ZipFile
 
-import socket
+sys.path.append('src')
+from idgen import IdGen
+from xmlbt import XmlBt
+from ocr import Ocr
+from pdf import PdfTxt
 
-from src.idgen import IdGen
-from src.xmlbt import XmlBt
-from src.ocr import Ocr
-from src.pdf import PdfTxt
 
 app = Flask(__name__)
 app.debug = True
+
 
 # index
 @app.route('/', methods=["GET"])
@@ -136,51 +138,63 @@ def ocr_process():
 
 
 # PDF to text
-@app.route('/pdftxt', methods=["GET"])
-def pdftxt_index():
-    return render_template('pdftxt_index.html')
+@app.route('/pdfconv', methods=["GET"])
+def pdfconv_index():
+    return render_template('pdfconv_index.html')
 
 
-@app.route('/pdftxt/preview', methods=["POST"])
-def pdftxt_preview():
+@app.route('/pdfconv/preview', methods=["POST"])
+def pdfconv_preview():
     if request.method == 'POST':
         if 'file' not in request.files:
             flash('No file part')
-            return redirect('/pdftxt')
+            return redirect('/pdfconv')
         file = request.files['file']
         if file.filename == '':
             flash('No selected file')
-            return redirect('/pdftxt')
+            return redirect('/pdfconv')
 
         print(file)
         pdf = PdfTxt()
-        res = pdf.preview(file.stream)
+        txt = pdf.convert_to_txt(file.stream, prange=range(0, 1))
+        res = {'result' : txt}
         return jsonify(res)
 
 
-@app.route('/pdftxt/convert', methods=["POST"])
-def pdftxt_convert():
+@app.route('/pdfconv/convert', methods=["POST"])
+def pdfconv_convert():
     if request.method == 'POST':
         if 'file' not in request.files:
             flash('No file part')
-            return redirect('/pdftxt')
+            return redirect('/pdfconv')
         file = request.files['file']
         print(file)
         if file.filename == '':
             flash('No selected file')
-            return redirect('/pdftxt')
+            return redirect('/pdfconv')
 
-        fn = file.filename + '.txt'
+        file_fmt = request.form['file_fmt']
+        print(file_fmt)
 
         print(file)
-        pdf = PdfTxt()
-        txt = pdf.convert(file.stream)
-
         memory_file = BytesIO()
-        with ZipFile(memory_file, 'w') as zf:
-            zf.writestr(fn, txt)
+
+        pdf = PdfTxt()
+        if file_fmt == 'docx':
+            doc = pdf.convert_to_doc(file.stream, prange=range(0, 10))
+
+            fn = file.filename + '.docx'
+            with ZipFile(memory_file, 'w') as zf:
+                zf.writestr(fn, doc.read())
+        else:
+            txt = pdf.convert_to_txt(file.stream, prange=range(0, 10))
+
+            fn = file.filename + '.txt'
+            with ZipFile(memory_file, 'w') as zf:
+                zf.writestr(fn, txt)
+
         memory_file.seek(0)
-        return send_file(memory_file, attachment_filename='pdftxt.zip', as_attachment=True)
+        return send_file(memory_file, attachment_filename='pdfconv.zip', as_attachment=True)
 
 
 # Let's encrypt
