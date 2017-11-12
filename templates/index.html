@@ -2,7 +2,7 @@
 <html>
 <head>
   {% include 'hheader.html' %}
-  <title>Web Toys</title>
+  <title>{{ s.gettext('site_title') }}</title>
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -25,61 +25,61 @@
 }(document, 'script', 'facebook-jssdk'));</script>
 
 <ol class="breadcrumb">
-  <li class="active">Top</li>
+  <li class="active">{{ s.gettext('nav_top') }}</li>
 </ol>
 
 <div class="container">
-  <h1>Web Toys</h1>
+  <h1>{{ s.gettext('site_title') }}</h1>
   <script src="http://code.jquery.com/jquery.js"></script>
   <script src="static/js/bootstrap.min.js"></script>
   <script src="static/js/app.js"></script>
 
   <div class="panel panel-default">
-    <div class="panel-heading">What's this?</div>
+    <div class="panel-heading">{{ s.gettext('dh_intro') }}</div>
     <div class="panel-body">
-      Common tools for web developers.
+      {{ s.gettext('dd_intro') }}
     </div>
   </div>
 
   <div class="row">
     <div class="col-md-4">
-      <h3>HTTP Request Header</h3>
-      <p>Check HTTP Request your browser is sending.</p>
+      <h3>{{ s.gettext('sh_hhdr') }}</h3>
+      <p>{{ s.gettext('sd_hhdr') }}</p>
       <p><a class="btn btn-primary" href="/hhdr" role="button">Go</a></p>
     </div>
     <div class="col-md-4">
-      <h3>URL Encode/Decode</h3>
-      <p>Apply Javascript encodeURI() or decodeURI()</p>
+      <h3>{{ s.gettext('sh_urle') }}</h3>
+      <p>{{ s.gettext('sd_urle') }}</p>
       <p><a class="btn btn-primary" href="/urle" role="button">Go</a></p>
     </div>
     <div class="col-md-4">
-      <h3>Unicode Escape/Unescape</h3>
-      <p>Apply Javascript escape() or unescape()</p>
+      <h3>{{ s.gettext('sh_urie') }}</h3>
+      <p>{{ s.gettext('sd_urie') }}</p>
       <p><a class="btn btn-primary" href="/unie" role="button">Go</a></p>
     </div>
     <div class="col-md-4">
-      <h3>Base64 Encoder/Decoder</h3>
-      <p>Apply Javascript window.atob/bota.</p>
+      <h3>{{ s.gettext('sh_base') }}</h3>
+      <p>{{ s.gettext('sd_base') }}</p>
       <p><a class="btn btn-primary" href="/base" role="button">Go</a></p>
     </div>
     <div class="col-md-4">
-      <h3>XML Beautifier</h3>
-      <p>Pretty format XML</p>
+      <h3>{{ s.gettext('sh_xmlbt') }}</h3>
+      <p>{{ s.gettext('sd_xmlbt') }}</p>
       <p><a class="btn btn-primary" href="/xmlbt" role="button">Go</a></p>
     </div>
     <div class="col-md-4">
-      <h3>ID generator</h3>
-      <p>Generate random IDs</p>
+      <h3>{{ s.gettext('sh_ids') }}</h3>
+      <p>{{ s.gettext('sd_ids') }}</p>
       <p><a class="btn btn-primary" href="/ids" role="button">Go</a></p>
     </div>
     <div class="col-md-4">
-      <h3>PDF converter</h3>
-      <p>Convert from PDF to Word or Text</p>
+      <h3>{{ s.gettext('sh_pdfconv') }}</h3>
+      <p>{{ s.gettext('sd_pdfconv') }}</p>
       <p><a class="btn btn-primary" href="/pdfconv" role="button">Go</a></p>
     </div>
     <div class="col-md-4">
-      <h3>OCR</h3>
-      <p>Extract text from image</p>
+      <h3>{{ s.gettext('sh_ocr') }}</h3>
+      <p>{{ s.gettext('sd_ocr') }}</p>
       <p><a class="btn btn-primary" href="/ocr" role="button">Go</a></p>
     </div>
   </div>

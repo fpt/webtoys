@@ -14,6 +14,7 @@ from idgen import IdGen
 from xmlbt import XmlBt
 from ocr import Ocr
 from pdf import PdfTxt
+from strings import Strings
 
 
 app = Flask(__name__)
@@ -23,7 +24,8 @@ app.debug = True
 # index
 @app.route('/', methods=["GET"])
 def index():
-    return render_template('index.html')
+    return render_template('index.html',
+        s = Strings(request.headers.get('Accept-Language')) )
 
 # HTTP Header
 @app.route('/hhdr', methods=["GET"])
@@ -140,7 +142,8 @@ def ocr_process():
 # PDF to text
 @app.route('/pdfconv', methods=["GET"])
 def pdfconv_index():
-    return render_template('pdfconv_index.html')
+    return render_template('pdfconv_index.html',
+        s = Strings(request.headers.get('Accept-Language')) )
 
 
 @app.route('/pdfconv/preview', methods=["POST"])
