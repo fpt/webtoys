@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html>
+<head>
+  {% include 'hheader.html' %}
+  <title>{{ s.gettext('sh_diff') }}</title>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link href="static/css/bootstrap.min.css" rel="stylesheet" media="screen">
+  <link href="static/css/bootstrap-theme.min.css" rel="stylesheet" media="screen">
+  <link rel="stylesheet" href="static/css/dropzone.css">
+</head>
+
+<body>
+
+<ol class="breadcrumb">
+  <li><a href="/">{{ s.gettext('site_title') }} {{ s.gettext('nav_top') }}</a></li>
+  <li class="active">{{ s.gettext('sh_diff') }}</li>
+</ol>
+
+<div class="container">
+  <script src="http://code.jquery.com/jquery.js"></script>
+  <script src="static/js/bootstrap.min.js"></script>
+  <script src="static/js/dropzone.js"></script>
+
+  <h1>{{ s.gettext('sh_diff') }}</h1>
+
+  <div class="panel panel-default">
+    <div class="panel-heading">{{ s.gettext('dh_pdfconv') }}</div>
+    <div class="panel-body">
+      {{ s.gettext('dd_pdfconv') }}
+      <p>{{ s.gettext('dd_pdfconv2') }}</p>
+    </div>
+  </div>
+
+  <div class="panel panel-default">
+    <div class="row">
+      <div class="col-md-4">
+        gg
+        <form action="/diff/left" class="dropzone"></form>
+      </div>
+      <div class="col-md-4">
+        gg
+        <form action="/diff/right" class="dropzone"></form>
+      </div>
+    </div>
+  </div>
+
+  <form enctype="multipart/form-data" action="/pdfconv/convert" method="post" class="form-horizontal">
+    <div class="form-group">
+      <label for="idlen" class="control-label col-xs-2">{{ s.gettext('lb_pdfconv_choosepdf') }}</label>
+      <div class="col-xs-5">
+        <input id="myFileInput" type="file" name="file" accept="application/pdf">
+<script>
+//Dropzone.autoProcessQueue = false;
+
+var myInput = document.getElementById('myFileInput');
+
+function sendPic() {
+    var file = myInput.files[0];
+
+    // Send file here either by adding it to a `FormData` object 
+    // and sending that via XHR, or by simply passing the file into 
+    // the `send` method of an XHR instance.
+
+    var formdata = new FormData();
+    formdata.append('file', file);
+    console.log(formdata);
+
+    var xhr = new XMLHttpRequest();
+    xhr.onreadystatechange = function() {
+        if (xhr.readyState == 4 && xhr.status == 200) {
+            //console.log(xhr.responseText)
+            obj = JSON.parse(xhr.responseText);
+            $('#pdftxt_result').text(obj.result)
+        }
+    };
+    xhr.open("POST", "pdfconv/preview", true);
+    xhr.send(formdata);
+    xhr.onload = function(e) {
+      console.log(e)
+    };
+}
+
+myInput.addEventListener('change', sendPic, false);
+</script>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label class="control-label col-xs-2">{{ s.gettext('lb_pdfconv_preview') }}</label>
+      <div class="col-xs-5">
+        <textarea id="pdftxt_result" style="font-family:courier; width:20em; height:8em; background-color:silver;" readonly=""></textarea>
+      </div>
+    </div>
+
+  </form>
+</div>
+
+</body>
+</html>

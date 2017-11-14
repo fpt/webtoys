@@ -6,11 +6,12 @@ import zlib
 import math
 from array import array
 from pprint import pprint
+import struct
 
 from io import BytesIO, StringIO
 from PIL import Image, ImageOps, ImageChops
 
-from pdfminer.pdftypes import LITERALS_FLATE_DECODE, LITERALS_DCT_DECODE, PDFObjRef
+from pdfminer.pdftypes import LITERALS_FLATE_DECODE, LITERALS_DCT_DECODE, LITERALS_CCITTFAX_DECODE, PDFObjRef
 from pdfminer.pdfcolor import LITERAL_DEVICE_GRAY, LITERAL_DEVICE_RGB, LITERAL_DEVICE_CMYK
 
 import logging
@@ -24,6 +25,26 @@ def decode_4bpp(line):
         lo = (c & 0xf) << 4
         yield hi
         yield lo
+
+
+# https://stackoverflow.com/questions/2641770/extracting-image-from-pdf-with-ccittfaxdecode-filter
+def tiff_header_for_CCITT(width, height, img_size, CCITT_group=4):
+    tiff_header_struct = '<' + '2s' + 'h' + 'l' + 'h' + 'hhll' * 8 + 'h'
+    return struct.pack(tiff_header_struct,
+                       b'II',  # Byte order indication: Little indian
+                       42,  # Version number (always 42)
+                       8,  # Offset to first IFD
+                       8,  # Number of tags in IFD
+                       256, 4, 1, width,  # ImageWidth, LONG, 1, width
+                       257, 4, 1, height,  # ImageLength, LONG, 1, lenght
+                       258, 3, 1, 1,  # BitsPerSample, SHORT, 1, 1
+                       259, 3, 1, CCITT_group,  # Compression, SHORT, 1, 4 = CCITT Group 4 fax encoding
+                       262, 3, 1, 0,  # Threshholding, SHORT, 1, 0 = WhiteIsZero
+                       273, 4, 1, struct.calcsize(tiff_header_struct),  # StripOffsets, LONG, 1, len of header
+                       278, 4, 1, height,  # RowsPerStrip, LONG, 1, lenght
+                       279, 4, 1, img_size,  # StripByteCounts, LONG, 1, size of image
+                       0  # last IFD
+                       )
 
 
 ##  ImageWriter
@@ -41,7 +62,7 @@ class ImageWriter(object):
         colorspace = image.colorspace
         logger.debug(filters[0])
         logger.debug(image.srcsize)
-        logger.debug(bits)
+        logger.debug("bpp:" + str(bits))
         logger.debug(image.colorspace)
         logger.debug(image.imagemask)
 
@@ -86,6 +107,17 @@ class ImageWriter(object):
             ifp = BytesIO(raw_data)
             img = Image.open(ifp)
             #img = img.transpose(Image.FLIP_TOP_BOTTOM)
+            return (img, path)
+        elif len(filters) == 1 and filters[0] in LITERALS_CCITTFAX_DECODE:
+            path = image.name + '.tiff'
+            data = stream.get_rawdata()
+
+            img_size = len(data)
+            tiff_header = tiff_header_for_CCITT(width, height, img_size)
+
+            fp = BytesIO(tiff_header + data)
+            img = Image.open(fp)
+
             return (img, path)
         elif isinstance(filters[0], PDFObjRef):
             ref = filters[0]

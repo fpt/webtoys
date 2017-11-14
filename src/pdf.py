@@ -248,6 +248,8 @@ def main():
     args = parser.parse_args()
 
     logger.setLevel(logging.DEBUG)
+    import pdf_ltimage
+    pdf_ltimage.logger.setLevel(logging.DEBUG)
 
     o = PdfTxt()
     logger.debug(args)

@@ -31,6 +31,8 @@ strings = {
         'lb_pdfconv_run' : 'Convert and Download',
         'sh_ocr' : 'OCR',
         'sd_ocr' : 'Extract text from image',
+        'sh_diff' : 'Compare files',
+        'sd_diff' : 'Compare contents of two files.',
     },
     'ja': {
         'site_title' : 'ウェブトイズ',
@@ -60,6 +62,8 @@ strings = {
         'lb_pdfconv_run' : '変換してダウンロード',
         'sh_ocr' : 'OCR',
         'sd_ocr' : '画像から文字を抽出します。',
+        'sh_diff' : 'ファイル比較',
+        'sd_diff' : '二つのファイルの内容を比較して差分をハイライトします。',
     }
 }
 
