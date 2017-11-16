@@ -45,42 +45,47 @@
     <div class="col-md-4">
       <h3>{{ s.gettext('sh_hhdr') }}</h3>
       <p>{{ s.gettext('sd_hhdr') }}</p>
-      <p><a class="btn btn-primary" href="/hhdr" role="button">Go</a></p>
+      <p><a class="btn btn-primary" href="{{ url_for('hhdr_index') }}" role="button">Go</a></p>
     </div>
     <div class="col-md-4">
       <h3>{{ s.gettext('sh_urle') }}</h3>
       <p>{{ s.gettext('sd_urle') }}</p>
-      <p><a class="btn btn-primary" href="/urle" role="button">Go</a></p>
+      <p><a class="btn btn-primary" href="{{ url_for('urle_index') }}" role="button">Go</a></p>
     </div>
     <div class="col-md-4">
       <h3>{{ s.gettext('sh_urie') }}</h3>
       <p>{{ s.gettext('sd_urie') }}</p>
-      <p><a class="btn btn-primary" href="/unie" role="button">Go</a></p>
+      <p><a class="btn btn-primary" href="{{ url_for('unie_index') }}" role="button">Go</a></p>
     </div>
     <div class="col-md-4">
       <h3>{{ s.gettext('sh_base') }}</h3>
       <p>{{ s.gettext('sd_base') }}</p>
-      <p><a class="btn btn-primary" href="/base" role="button">Go</a></p>
+      <p><a class="btn btn-primary" href="{{ url_for('base_index') }}" role="button">Go</a></p>
     </div>
     <div class="col-md-4">
       <h3>{{ s.gettext('sh_xmlbt') }}</h3>
       <p>{{ s.gettext('sd_xmlbt') }}</p>
-      <p><a class="btn btn-primary" href="/xmlbt" role="button">Go</a></p>
+      <p><a class="btn btn-primary" href="{{ url_for('xmlbt_index') }}" role="button">Go</a></p>
     </div>
     <div class="col-md-4">
       <h3>{{ s.gettext('sh_ids') }}</h3>
       <p>{{ s.gettext('sd_ids') }}</p>
-      <p><a class="btn btn-primary" href="/ids" role="button">Go</a></p>
+      <p><a class="btn btn-primary" href="{{ url_for('ids_index') }}" role="button">Go</a></p>
     </div>
     <div class="col-md-4">
       <h3>{{ s.gettext('sh_pdfconv') }}</h3>
       <p>{{ s.gettext('sd_pdfconv') }}</p>
-      <p><a class="btn btn-primary" href="/pdfconv" role="button">Go</a></p>
+      <p><a class="btn btn-primary" href="{{ url_for('pdfconv_index') }}" role="button">Go</a></p>
     </div>
     <div class="col-md-4">
       <h3>{{ s.gettext('sh_ocr') }}</h3>
       <p>{{ s.gettext('sd_ocr') }}</p>
-      <p><a class="btn btn-primary" href="/ocr" role="button">Go</a></p>
+      <p><a class="btn btn-primary" href="{{ url_for('ocr_index') }}" role="button">Go</a></p>
+    </div>
+    <div class="col-md-4">
+      <h3>{{ s.gettext('sh_diff') }}</h3>
+      <p>{{ s.gettext('sd_diff') }}</p>
+      <p><a class="btn btn-primary" href="{{ url_for('diff_index') }}" role="button">Go</a></p>
     </div>
   </div>
 

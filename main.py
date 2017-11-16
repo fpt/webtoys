@@ -14,11 +14,14 @@ from idgen import IdGen
 from xmlbt import XmlBt
 from ocr import Ocr
 from pdf import PdfTxt
+from diff import TextDiff
+from docreader import DocReader
 from strings import Strings
 
 
 app = Flask(__name__)
 app.debug = True
+app.config['MAX_CONTENT_LENGTH'] = 1 * 1024 * 1024
 
 
 # index
@@ -200,10 +203,62 @@ def pdfconv_convert():
         return send_file(memory_file, attachment_filename='pdfconv.zip', as_attachment=True)
 
 
-# Let's encrypt
-@app.route('/.well-known/acme-challenge/9Z4E_EJmMOaZm7sOoWNVQxSGxjyURPCdlBJb1vA8_Uo', methods=["GET"])
-def letsencrypt():
-    return '9Z4E_EJmMOaZm7sOoWNVQxSGxjyURPCdlBJb1vA8_Uo.rq8s6XKxE74WK5RjTi-jsdMPGIEuiNVG9oIhE8IGgNI'
+# PDF to text
+@app.route('/diff', methods=["GET"])
+def diff_index():
+    return render_template('diff_index.html',
+        s = Strings(request.headers.get('Accept-Language')) )
+
+
+@app.route('/diff/compare', methods=["POST"])
+def diff_compare():
+    def is_docx(file):
+        docx_mime = 'application/vnd.openxmlformats-officedocument.wordprocessingml.document'
+        return file.filename.endswith('.docx') and file.content_type == docx_mime
+    def is_text(file):
+        return file.content_type.startswith('text/')
+
+    if request.method == 'POST':
+        files = []
+        for k, v in request.files.items():
+            if k.startswith('file'):
+                files.append(v)
+        if not files or len(files) != 2:
+            flash('Not enough files')
+            return redirect('/diff')
+        for f in files:
+            if not f.filename:
+                flash('No selected file')
+                return redirect('/diff')
+
+        file1, file2 = files
+        body1 = None
+        body2 = None
+        print(file1)
+        print(file2)
+        if is_docx(file1) and is_docx(file2):
+            dr = DocReader()
+            body1 = list(dr.process(file1.stream))
+            body2 = list(dr.process(file2.stream))
+        elif is_text(file1) and is_text(file2):
+            body1 = file1.stream.read().decode("utf-8").splitlines()
+            body2 = file2.stream.read().decode("utf-8").splitlines()
+        else:
+            flash('unsupported.')
+
+        td = TextDiff()
+        file1_rslt, file2_rslt = td.compare(body1,
+                                            body2 )
+
+        res = {
+            'result' : 'ok',
+            'left_filename' : files[0].filename,
+            'left_result' : file1_rslt,
+            'right_filename' : files[1].filename,
+            'right_result' : file2_rslt,
+        }
+        return jsonify(res)
+
 
 if __name__ == '__main__':
     port = int(os.environ.get("PORT", 5000))

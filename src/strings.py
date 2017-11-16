@@ -33,6 +33,8 @@ strings = {
         'sd_ocr' : 'Extract text from image',
         'sh_diff' : 'Compare files',
         'sd_diff' : 'Compare contents of two files.',
+        'dh_diff' : 'Usage',
+        'dd_diff' : 'Drop two text or docx files. NOTE: both files must have the same type.',
     },
     'ja': {
         'site_title' : 'ウェブトイズ',
@@ -64,6 +66,8 @@ strings = {
         'sd_ocr' : '画像から文字を抽出します。',
         'sh_diff' : 'ファイル比較',
         'sd_diff' : '二つのファイルの内容を比較して差分をハイライトします。',
+        'dh_diff' : '使い方',
+        'dd_diff' : '2つのテキストファイル又はWord(docx)ファイルをドロップしてください。2つのファイルは同じ形式でなくてはなりません。',
     }
 }
 
