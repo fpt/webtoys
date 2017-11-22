@@ -3,7 +3,7 @@
 
 import sys,os
 import socket
-from flask import Flask, render_template, make_response, jsonify, send_file
+from flask import Flask, Blueprint, g,render_template, make_response, jsonify, send_file
 from flask import request
 from flask import Response
 from io import BytesIO
@@ -23,9 +23,30 @@ app = Flask(__name__)
 app.debug = True
 app.config['MAX_CONTENT_LENGTH'] = 1 * 1024 * 1024
 
+# http://flask.pocoo.org/docs/0.12/patterns/urlprocessors/
+# https://stackoverflow.com/questions/25961711/flask-how-can-i-always-include-language-code-in-url
+#bp = Blueprint('frontend', __name__, url_prefix='/<lang>')
+bp = Blueprint('top', __name__)
+
+# @bp.url_defaults
+# def add_language_code(endpoint, values):
+#     print('h')
+#     values.setdefault('lang', g.lang_code)
+
+# @bp.url_value_preprocessor
+# def pull_lang_code(endpoint, values):
+#     print('j')
+#     g.lang_code = values.pop('lang')
+
+# @bp.before_request
+# def x(*args, **kwargs):
+#     print('hoge')
+#     if not request.view_args.get('lang'):
+#         return redirect('/en' + request.full_path)
+
 
 # index
-@app.route('/', methods=["GET"])
+@bp.route('/', methods=["GET"])
 def index():
     return render_template('index.html',
         s = Strings(request.headers.get('Accept-Language')) )
@@ -258,6 +279,10 @@ def diff_compare():
             'right_result' : file2_rslt,
         }
         return jsonify(res)
+
+
+# app.register_blueprint(bp, url_defaults={'lang': None})
+app.register_blueprint(bp, url_prefix='/')
 
 
 if __name__ == '__main__':

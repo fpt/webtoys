@@ -83,5 +83,15 @@ class Strings():
             print(e)
             self._lang = 'en'
 
+    @classmethod
+    def get_lang(cls, lang):
+        try:
+            arr = [(lang.index(k), k) for k in strings.keys() if k in lang]
+            arr = sorted(arr, key=lambda tup: tup[0])
+            return arr[0][1]
+        except ValueError as e:
+            print(e)
+            return 'en'
+
     def gettext(self, key):
         return strings[self._lang][key]

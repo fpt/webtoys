@@ -3,9 +3,16 @@
 
 
 from argparse import ArgumentParser, FileType
-from docx import Document
+import docx
 from docx.shared import Inches
 from itertools import chain
+
+from docx.document import Document
+from docx.oxml.table import CT_Tbl
+from docx.oxml.document import CT_Body
+from docx.oxml.text.paragraph import CT_P
+from docx.table import _Cell, Table
+from docx.text.paragraph import Paragraph
 
 
 class DocReader(object):
@@ -14,37 +21,49 @@ class DocReader(object):
     def __init__(self):
         pass
 
-    def process(self, fp, do_table = False):
+    def process(self, fp):
 
-        def process_paragraphs(doc):
+        # extract w:p and w:tbl somehow
+        def iter_block_items(doc):
+            assert isinstance(doc, Document)
+
+            d = {}
             for p in doc.paragraphs:
-                yield p.text.strip()
+                d[p._element] = p
+            for t in doc.tables:
+                d[t._element] = t
 
-        def process_tables(doc):
-            for tbl in doc.tables:
-                print(tbl.part)
-                print(parts_recur(tbl.part))
-                for row in tbl.rows:
-                    yield '\t'.join([c.text.strip() for c in row.cells])
+            es = doc._element.xpath('//w:tbl | //w:p')
+            for idx, e in enumerate(es):
+                if e in d.keys():
+                    o = d[e]
+                    if isinstance(o, Paragraph):
+                        yield do_paragraph(o)
+                    elif isinstance(o, Table):
+                        for t in do_table(o):
+                            yield t
+                else:
+                    pass
+                    # print(e)
 
-        def parts_recur(part):
-            for k, p in part.related_parts.items():
-                print(k)
-                print(p)
-                print(p.partname)
-                parts_recur(p)
+        def do_paragraph(par):
+            return par.text.strip()
 
-        doc = Document(fp)
-        if do_table:
-            return chain(process_paragraphs(doc), process_tables(doc))
-        else:
-            return process_paragraphs(doc)
+        def do_table(tbl):
+            for row in tbl.rows:
+                r = []
+                for c in row.cells:
+                    r.extend(list(do_cell(c)))
+                yield '\t'.join(r)
 
-        part = doc.part
-        print(part.partname)
-        print(part.related_parts)
-        parts_recur(part)
-        return []
+        def do_cell(c):
+            yield c.text.strip()
+            for t in c.tables:
+                return do_table(t)
+
+        doc = docx.Document(fp)
+        # https://github.com/python-openxml/python-docx/issues/40#issuecomment-42096998
+        return iter_block_items(doc)
 
 
 def main():
@@ -53,7 +72,7 @@ def main():
     args = parser.parse_args()
 
     dr = DocReader()
-    text = '\n'.join(list(dr.process(args.infile, do_table=True)))
+    text = '\n'.join(list(dr.process(args.infile)))
     print(text)
 
 if __name__ == '__main__':
