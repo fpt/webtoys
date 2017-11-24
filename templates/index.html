@@ -7,8 +7,8 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="description" content="HTTP header, Base64, URL encode/decode, Unicode escape/unescape, ID generator">
-  <link href="static/css/bootstrap.min.css" rel="stylesheet" media="screen">
-  <link href="static/css/bootstrap-theme.min.css" rel="stylesheet" media="screen">
+  <link href="{{ url_for('static', filename='css/bootstrap.min.css') }}" rel="stylesheet" media="screen">
+  <link href="{{ url_for('static', filename='css/bootstrap-theme.min.css') }}" rel="stylesheet" media="screen">
   <link rel="manifest" href="static/manifest.json">
 </head>
 
@@ -31,8 +31,8 @@
 <div class="container">
   <h1>{{ s.gettext('site_title') }}</h1>
   <script src="http://code.jquery.com/jquery.js"></script>
-  <script src="static/js/bootstrap.min.js"></script>
-  <script src="static/js/app.js"></script>
+  <script src="{{ url_for('static', filename='js/bootstrap.min.js') }}"></script>
+  <script src="{{ url_for('static', filename='js/app.js') }}"></script>
 
   <div class="panel panel-default">
     <div class="panel-heading">{{ s.gettext('dh_intro') }}</div>
@@ -45,47 +45,47 @@
     <div class="col-md-4">
       <h3>{{ s.gettext('sh_hhdr') }}</h3>
       <p>{{ s.gettext('sd_hhdr') }}</p>
-      <p><a class="btn btn-primary" href="{{ url_for('hhdr_index') }}" role="button">Go</a></p>
+      <p><a class="btn btn-primary" href="{{ url_for('top.hhdr_index') }}" role="button">Go</a></p>
     </div>
     <div class="col-md-4">
       <h3>{{ s.gettext('sh_urle') }}</h3>
       <p>{{ s.gettext('sd_urle') }}</p>
-      <p><a class="btn btn-primary" href="{{ url_for('urle_index') }}" role="button">Go</a></p>
+      <p><a class="btn btn-primary" href="{{ url_for('top.urle_index') }}" role="button">Go</a></p>
     </div>
     <div class="col-md-4">
-      <h3>{{ s.gettext('sh_urie') }}</h3>
-      <p>{{ s.gettext('sd_urie') }}</p>
-      <p><a class="btn btn-primary" href="{{ url_for('unie_index') }}" role="button">Go</a></p>
+      <h3>{{ s.gettext('sh_unie') }}</h3>
+      <p>{{ s.gettext('sd_unie') }}</p>
+      <p><a class="btn btn-primary" href="{{ url_for('top.unie_index') }}" role="button">Go</a></p>
     </div>
     <div class="col-md-4">
       <h3>{{ s.gettext('sh_base') }}</h3>
       <p>{{ s.gettext('sd_base') }}</p>
-      <p><a class="btn btn-primary" href="{{ url_for('base_index') }}" role="button">Go</a></p>
+      <p><a class="btn btn-primary" href="{{ url_for('top.base_index') }}" role="button">Go</a></p>
     </div>
     <div class="col-md-4">
       <h3>{{ s.gettext('sh_xmlbt') }}</h3>
       <p>{{ s.gettext('sd_xmlbt') }}</p>
-      <p><a class="btn btn-primary" href="{{ url_for('xmlbt_index') }}" role="button">Go</a></p>
+      <p><a class="btn btn-primary" href="{{ url_for('top.xmlbt_index') }}" role="button">Go</a></p>
     </div>
     <div class="col-md-4">
       <h3>{{ s.gettext('sh_ids') }}</h3>
       <p>{{ s.gettext('sd_ids') }}</p>
-      <p><a class="btn btn-primary" href="{{ url_for('ids_index') }}" role="button">Go</a></p>
+      <p><a class="btn btn-primary" href="{{ url_for('top.ids_index') }}" role="button">Go</a></p>
     </div>
     <div class="col-md-4">
       <h3>{{ s.gettext('sh_pdfconv') }}</h3>
       <p>{{ s.gettext('sd_pdfconv') }}</p>
-      <p><a class="btn btn-primary" href="{{ url_for('pdfconv_index') }}" role="button">Go</a></p>
+      <p><a class="btn btn-primary" href="{{ url_for('top.pdfconv_index') }}" role="button">Go</a></p>
     </div>
     <div class="col-md-4">
       <h3>{{ s.gettext('sh_ocr') }}</h3>
       <p>{{ s.gettext('sd_ocr') }}</p>
-      <p><a class="btn btn-primary" href="{{ url_for('ocr_index') }}" role="button">Go</a></p>
+      <p><a class="btn btn-primary" href="{{ url_for('top.ocr_index') }}" role="button">Go</a></p>
     </div>
     <div class="col-md-4">
       <h3>{{ s.gettext('sh_diff') }}</h3>
       <p>{{ s.gettext('sd_diff') }}</p>
-      <p><a class="btn btn-primary" href="{{ url_for('diff_index') }}" role="button">Go</a></p>
+      <p><a class="btn btn-primary" href="{{ url_for('top.diff_index') }}" role="button">Go</a></p>
     </div>
   </div>
 

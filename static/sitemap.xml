@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset
       xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+      xmlns:xhtml="http://www.w3.org/1999/xhtml"
       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
       xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9
             http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd">
@@ -8,32 +9,62 @@
 
 <url>
   <loc>http://webtoys.fjmt.me/</loc>
+  <xhtml:link rel="alternate"
+              hreflang="ja"
+              href="http://webtoys.fjmt.me/ja/" />
 </url>
 <url>
   <loc>http://webtoys.fjmt.me/hhdr</loc>
+  <xhtml:link rel="alternate"
+              hreflang="ja"
+              href="http://webtoys.fjmt.me/ja/hhdr" />
 </url>
 <url>
   <loc>http://webtoys.fjmt.me/urle</loc>
+  <xhtml:link rel="alternate"
+              hreflang="ja"
+              href="http://webtoys.fjmt.me/ja/urle" />
 </url>
 <url>
   <loc>http://webtoys.fjmt.me/unie</loc>
+  <xhtml:link rel="alternate"
+              hreflang="ja"
+              href="http://webtoys.fjmt.me/ja/urie" />
 </url>
 <url>
   <loc>http://webtoys.fjmt.me/base</loc>
+  <xhtml:link rel="alternate"
+              hreflang="ja"
+              href="http://webtoys.fjmt.me/ja/base" />
 </url>
 <url>
   <loc>http://webtoys.fjmt.me/xmlbt</loc>
+  <xhtml:link rel="alternate"
+              hreflang="ja"
+              href="http://webtoys.fjmt.me/ja/xmlbt" />
 </url>
 <url>
   <loc>http://webtoys.fjmt.me/ids</loc>
+  <xhtml:link rel="alternate"
+              hreflang="ja"
+              href="http://webtoys.fjmt.me/ja/ids" />
 </url>
 <url>
   <loc>http://webtoys.fjmt.me/pdfconv</loc>
+  <xhtml:link rel="alternate"
+              hreflang="ja"
+              href="http://webtoys.fjmt.me/ja/pdfconv" />
 </url>
 <url>
   <loc>http://webtoys.fjmt.me/ocr</loc>
+  <xhtml:link rel="alternate"
+              hreflang="ja"
+              href="http://webtoys.fjmt.me/ja/ocr" />
 </url>
 <url>
   <loc>http://webtoys.fjmt.me/diff</loc>
+  <xhtml:link rel="alternate"
+              hreflang="ja"
+              href="http://webtoys.fjmt.me/ja/diff" />
 </url>
 </urlset>

@@ -4,12 +4,13 @@
 import sys,os
 import socket
 from flask import Flask, Blueprint, g,render_template, make_response, jsonify, send_file
-from flask import request
+from flask import request, redirect
 from flask import Response
 from io import BytesIO
 from zipfile import ZipFile
 
 sys.path.append('src')
+
 from idgen import IdGen
 from xmlbt import XmlBt
 from ocr import Ocr
@@ -28,31 +29,32 @@ app.config['MAX_CONTENT_LENGTH'] = 1 * 1024 * 1024
 #bp = Blueprint('frontend', __name__, url_prefix='/<lang>')
 bp = Blueprint('top', __name__)
 
-# @bp.url_defaults
-# def add_language_code(endpoint, values):
-#     print('h')
-#     values.setdefault('lang', g.lang_code)
 
-# @bp.url_value_preprocessor
-# def pull_lang_code(endpoint, values):
-#     print('j')
-#     g.lang_code = values.pop('lang')
+# automatically inject values into a call for url_for()
+@bp.url_defaults
+def add_language_code(endpoint, values):
+    if 'lang_code' in values or 'lang_code' not in g or not g.lang_code:
+        return
+    values['lang'] = g.lang_code
 
-# @bp.before_request
-# def x(*args, **kwargs):
-#     print('hoge')
-#     if not request.view_args.get('lang'):
-#         return redirect('/en' + request.full_path)
+
+# executed right after the request was matched and can execute code based on the URL values.
+@bp.url_value_preprocessor
+def pull_lang_code(endpoint, values):
+    if 'lang' in values:
+        g.lang_code = values.pop('lang')
+    else:
+        g.lang_code = Strings.get_lang(request.headers.get('Accept-Language'))
 
 
 # index
 @bp.route('/', methods=["GET"])
 def index():
-    return render_template('index.html',
-        s = Strings(request.headers.get('Accept-Language')) )
+    return render_template('index.html', s = Strings(g.lang_code) )
+
 
 # HTTP Header
-@app.route('/hhdr', methods=["GET"])
+@bp.route('/hhdr', methods=["GET"])
 def hhdr_index():
 
     headers = { k : v for (k, v) in request.headers.items() }
@@ -75,26 +77,26 @@ def hhdr_index():
             headers=headers )
 
 # base64
-@app.route('/base', methods=["GET"])
+@bp.route('/base', methods=["GET"])
 def base_index():
-    return render_template('base_index.html')
+    return render_template('base_index.html', s = Strings(g.lang_code) )
 
 
 # url encode
-@app.route('/urle', methods=["GET"])
+@bp.route('/urle', methods=["GET"])
 def urle_index():
-    return render_template('urle_index.html')
+    return render_template('urle_index.html', s = Strings(g.lang_code) )
 
 
-@app.route('/unie', methods=["GET"])
+@bp.route('/unie', methods=["GET"])
 def unie_index():
-    return render_template('unie_index.html')
+    return render_template('unie_index.html', s = Strings(g.lang_code) )
 
 
 # xml beautify
-@app.route('/xmlbt', methods=["GET"])
+@bp.route('/xmlbt', methods=["GET"])
 def xmlbt_index():
-    return render_template('xmlbt_index.html')
+    return render_template('xmlbt_index.html', s = Strings(g.lang_code) )
 
 
 @app.route('/xmlbt/beautify', methods=['POST'])
@@ -106,9 +108,9 @@ def xmlbt_beautify():
 
 
 # ids
-@app.route('/ids', methods=["GET"])
+@bp.route('/ids', methods=["GET"])
 def ids_index():
-    return render_template('ids_index.html')
+    return render_template('ids_index.html', s = Strings(g.lang_code) )
 
 
 @app.route('/ids/preview', methods=['POST'])
@@ -141,9 +143,9 @@ def ids_download():
 
 
 # OCR
-@app.route('/ocr', methods=["GET"])
+@bp.route('/ocr', methods=["GET"])
 def ocr_index():
-    return render_template('ocr_index.html')
+    return render_template('ocr_index.html', s = Strings(g.lang_code) )
 
 
 @app.route('/ocr/process', methods=["POST"])
@@ -164,10 +166,9 @@ def ocr_process():
 
 
 # PDF to text
-@app.route('/pdfconv', methods=["GET"])
+@bp.route('/pdfconv', methods=["GET"])
 def pdfconv_index():
-    return render_template('pdfconv_index.html',
-        s = Strings(request.headers.get('Accept-Language')) )
+    return render_template('pdfconv_index.html', s = Strings(g.lang_code) )
 
 
 @app.route('/pdfconv/preview', methods=["POST"])
@@ -225,10 +226,9 @@ def pdfconv_convert():
 
 
 # PDF to text
-@app.route('/diff', methods=["GET"])
+@bp.route('/diff', methods=["GET"])
 def diff_index():
-    return render_template('diff_index.html',
-        s = Strings(request.headers.get('Accept-Language')) )
+    return render_template('diff_index.html', s = Strings(g.lang_code) )
 
 
 @app.route('/diff/compare', methods=["POST"])
@@ -281,8 +281,9 @@ def diff_compare():
         return jsonify(res)
 
 
-# app.register_blueprint(bp, url_defaults={'lang': None})
-app.register_blueprint(bp, url_prefix='/')
+app.register_blueprint(bp, url_defaults={})
+app.register_blueprint(bp, url_prefix='/ja', url_defaults={'lang': 'ja'})
+#print(app.url_map)
 
 
 if __name__ == '__main__':

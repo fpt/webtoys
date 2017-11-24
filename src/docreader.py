@@ -33,7 +33,7 @@ class DocReader(object):
             for t in doc.tables:
                 d[t._element] = t
 
-            es = doc._element.xpath('//w:tbl | //w:p')
+            es = doc._element.xpath('//w:tbl[not(ancestor::w:tbl)] | //w:p[not(ancestor::w:tbl)]')
             for idx, e in enumerate(es):
                 if e in d.keys():
                     o = d[e]

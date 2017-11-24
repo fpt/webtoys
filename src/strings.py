@@ -12,8 +12,8 @@ strings = {
         'sd_hhdr' : 'Check HTTP Request your browser is sending.',
         'sh_urle' : 'URL Encode/Decode',
         'sd_urle' : 'Apply Javascript encodeURI() or decodeURI()',
-        'sh_urie' : 'Unicode Escape/Unescape',
-        'sd_urie' : 'Apply Javascript escape() or unescape()',
+        'sh_unie' : 'Unicode Escape/Unescape',
+        'sd_unie' : 'Apply Javascript escape() or unescape()',
         'sh_base' : 'Base64 Encoder/Decoder',
         'sd_base' : 'Apply Javascript window.atob/bota.',
         'sh_xmlbt' : 'XML Beautifier',
@@ -45,8 +45,8 @@ strings = {
         'sd_hhdr' : 'ブラウザが送信するHTMLリクエストヘッダを表示します。',
         'sh_urle' : 'URLエンコード・デコード',
         'sd_urle' : 'JavascriptのencodeURI()やdecodeURI()を使って、URL中の文字を変換します。',
-        'sh_urie' : 'Unicodeエスケープ・アンケスケープ',
-        'sd_urie' : 'Javascriptのescape()やunescape()を使って、URL中の文字を変換します。',
+        'sh_unie' : 'Unicodeエスケープ・アンケスケープ',
+        'sd_unie' : 'Javascriptのescape()やunescape()を使って、URL中の文字を変換します。',
         'sh_base' : 'Base64エンコーダ・デコーダ',
         'sd_base' : 'Javascriptのatobやbotaを使って、文字列をBase64変換します。',
         'sh_xmlbt' : 'XML整形',
@@ -74,14 +74,10 @@ strings = {
 
 class Strings():
     def __init__(self, lang):
-        try:
-            arr = [(lang.index(k), k) for k in strings.keys() if k in lang]
-            arr = sorted(arr, key=lambda tup: tup[0])
-            self._lang = arr[0][1]
-            # print('String lang is: ' + self._lang)
-        except ValueError as e:
-            print(e)
-            self._lang = 'en'
+        if lang not in strings.keys():
+            raise "invalid lang code"
+        self._lang = lang
+
 
     @classmethod
     def get_lang(cls, lang):
@@ -92,6 +88,7 @@ class Strings():
         except ValueError as e:
             print(e)
             return 'en'
+
 
     def gettext(self, key):
         return strings[self._lang][key]
