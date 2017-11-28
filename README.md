@@ -4,6 +4,15 @@ A barebones Python app, which can easily be deployed to Heroku.
 
 This application supports the [Getting Started with Python on Heroku](https://devcenter.heroku.com/articles/getting-started-with-python) article - check it out.
 
+## babel + react + es2015 + watchify
+npm install --save-dev babel-cli babel-preset-react react react-dom react-devtools
+https://blog.yipl.com.np/how-to-get-started-with-react-using-watchify-and-babelify-f87b532d107d
+https://jimdoescode.github.io/2015/07/18/npm-with-browserify-and-react.html
+
+https://mae.chab.in/archives/2765
+https://codeutopia.net/blog/2016/01/25/getting-started-with-npm-and-browserify-in-a-react-project/
+http://easyreactbook.com/blog/react-fundamentals-configuring-browserify-babelify-and-react
+
 ## Running Locally
 
 Make sure you have Python [installed properly](http://install.python-guide.org).  Also, install the [Heroku Toolbelt](https://toolbelt.heroku.com/) and [Postgres](https://devcenter.heroku.com/articles/heroku-postgresql#local-setup).

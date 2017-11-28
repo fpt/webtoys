@@ -14,9 +14,11 @@
   background-color: #fff;
   box-shadow: .1em .1em .5em rgba(0,0,0,.45);
 }
-.line-diff {
-  background-color:#FFC0C0;
-  width:100%;
+
+em.str-diff {
+  font-weight: normal;
+  font-style: normal;
+  background-color:#E99;
 }
 
 pre {
@@ -25,6 +27,17 @@ pre {
   counter-reset: line;
   overflow-x: auto;
   white-space: nowrap;
+}
+
+pre.multi-line {
+  font-family: monospace;
+  line-height: 0;
+  counter-reset: line;
+  white-space: pre-wrap;       /* Since CSS 2.1 */
+  white-space: -moz-pre-wrap;  /* Mozilla, since 1999 */
+  white-space: -pre-wrap;      /* Opera 4-6 */
+  white-space: -o-pre-wrap;    /* Opera 7 */
+  word-wrap: break-word;       /* Internet Explorer 5.5+ */
 }
 
 span.line-num {
@@ -40,6 +53,17 @@ span.line-num:before {
   padding: 0 .5em;
   margin-right: .5em;
   color: #888
+}
+
+.rel-line {
+  position:absolute;
+  width:2px;
+  background-color:#F88;
+} 
+
+.diff-block {
+  display: block;
+  background-color:#FCC;
 }
 
 </style>
@@ -73,6 +97,7 @@ span.line-num:before {
       </div>
       <div class="col-sm-12">
         <button id="btn-compare" class="btn btn-primary">Compare</button>
+        <input id="chk-line-toggle" class="btn" type="checkbox">Toggle multiline</button>
       </div>
       <div class="col-sm-6 diff-pane">
         <pre id="left-pane"></pre>
@@ -89,6 +114,71 @@ span.line-num:before {
 if (!FileList.prototype.map) {
   FileList.prototype.map = Array.prototype.map
 }
+
+
+// maybe useful
+// https://css-tricks.com/examples/ShapesOfCSS/
+function adjustLine(from, to, line){
+
+  var fT = from.top;
+  var tT = to.top;
+  var fL = from.left;
+  var tL = to.left;
+  
+  var CA   = Math.abs(tT - fT);
+  var CO   = Math.abs(tL - fL);
+  var H    = Math.sqrt(CA*CA + CO*CO);
+  var ANG  = 180 / Math.PI * Math.acos( CA/H );
+
+  if(tT > fT){
+      var top  = (tT-fT)/2 + fT;
+  }else{
+      var top  = (fT-tT)/2 + tT;
+  }
+  if(tL > fL){
+      var left = (tL-fL)/2 + fL;
+  }else{
+      var left = (fL-tL)/2 + tL;
+  }
+
+  if(( fT < tT && fL < tL) || ( tT < fT && tL < fL) || (fT > tT && fL > tL) || (tT > fT && tL > fL)){
+    ANG *= -1;
+  }
+  top-= H/2;
+
+  line.style["-webkit-transform"] = 'rotate('+ ANG +'deg)';
+  line.style["-moz-transform"] = 'rotate('+ ANG +'deg)';
+  line.style["-ms-transform"] = 'rotate('+ ANG +'deg)';
+  line.style["-o-transform"] = 'rotate('+ ANG +'deg)';
+  line.style["-transform"] = 'rotate('+ ANG +'deg)';
+  line.style.top    = top+'px';
+  line.style.left   = left+'px';
+  line.style.height = H + 'px';
+}
+
+
+function connectDiffBlocks(diff_lines) {
+  $(".rel-line").remove();
+
+  diff_lines.forEach(function(i) {
+    var d1 = $("." + i[0]);
+    var d2 = $("." + i[1]);
+    if (!d1.get(0) || !d2.get(0))
+      return;
+
+    var l = $('<div class="rel-line"/>');
+
+    adjustLine(
+      {top: d1.offset().top, left:d1.offset().left + d1.parent().width()}, 
+      d2.offset(),
+      l.get(0)
+    );      
+
+    $('body').append(l);
+  })
+}
+
+var diff_lines;
 
 Dropzone.options.diffDropzone = {
 
@@ -120,8 +210,21 @@ Dropzone.options.diffDropzone = {
 
     $('#left-pane').html(result.left_result)
     $('#right-pane').html(result.right_result)
+    connectDiffBlocks(result.diff_lines);
+    diff_lines = result.diff_lines;
   }
 };
+
+$('#chk-line-toggle').bind('click', function(){
+  $('pre').toggleClass('multi-line');
+  if (diff_lines)
+    connectDiffBlocks(diff_lines);
+})
+
+$(window).resize(function() {
+  if (diff_lines)
+    connectDiffBlocks(diff_lines);
+});
 
 </script>
 

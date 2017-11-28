@@ -268,8 +268,7 @@ def diff_compare():
             flash('unsupported.')
 
         td = TextDiff()
-        file1_rslt, file2_rslt = td.compare(body1,
-                                            body2 )
+        file1_rslt, file2_rslt, diff_lines = td.compare(body1, body2)
 
         res = {
             'result' : 'ok',
@@ -277,6 +276,7 @@ def diff_compare():
             'left_result' : file1_rslt,
             'right_filename' : files[1].filename,
             'right_result' : file2_rslt,
+            'diff_lines' : diff_lines,
         }
         return jsonify(res)
 
