@@ -6,6 +6,28 @@ from difflib import SequenceMatcher
 from argparse import ArgumentParser, FileType
 
 
+class Counter(object):
+    def __init__(self):
+        self.current = 0
+        self.match_start = 0
+        self.nmatch = 0
+
+    def progress(self, match_start, nmatch):
+        self.match_start = match_start
+        self.nmatch = nmatch
+
+    def slice_diff(self, seq):
+        return seq[self.current:self.match_start]
+
+    def slice_match(self, seq):
+        return seq[self.match_start:self.match_start + self.nmatch]
+
+    def next(self):
+        self.current = self.match_start + self.nmatch
+        self.match_start = 0
+        self.nmatch = 0
+
+
 class TextDiff(object):
     """Factory"""
 
@@ -20,6 +42,7 @@ class TextDiff(object):
         else:
             return pre + s + post
 
+
     def _compare_lines(self, la, lb):
         sa = '\n'.join(la)
         sb = '\n'.join(lb)
@@ -30,23 +53,27 @@ class TextDiff(object):
         str_diff_end = '</em>'
 
         s = SequenceMatcher(None, sa, sb)
-        ta_idx = 0
-        tb_idx = 0
+        cnt_a = Counter()
+        cnt_b = Counter()
         for block in s.get_matching_blocks():
             (a_idx, b_idx, nmatch) = block
             print("a[%d] and b[%d] match for %d elements" % block)
-            diff_a = sa[ta_idx:a_idx]
-            same_a = sa[a_idx:a_idx + nmatch]
-            diff_b = sb[tb_idx:b_idx]
-            same_b = sb[b_idx:b_idx + nmatch]
+            cnt_a.progress(a_idx, nmatch)
+            cnt_b.progress(b_idx, nmatch)
+            diff_a = cnt_a.slice_diff(sa)
+            same_a = cnt_a.slice_match(sa)
+            diff_b = cnt_b.slice_diff(sb)
+            same_b = cnt_b.slice_match(sb)
+
             if diff_a or diff_b:
                 ta_result += self._enclose(str_diff_start, diff_a, str_diff_end, consider_newline = True)
             ta_result += same_a
             if diff_a or diff_b:
                 tb_result += self._enclose(str_diff_start, diff_b, str_diff_end, consider_newline = True)
             tb_result += same_b
-            ta_idx = a_idx + nmatch
-            tb_idx = b_idx + nmatch
+
+            cnt_a.next()
+            cnt_b.next()
         return (ta_result.split('\n'), tb_result.split('\n'))
 
     def compare(self, ta_lines, tb_lines, linebreak = ''):
@@ -69,25 +96,27 @@ class TextDiff(object):
             return result
 
         s = SequenceMatcher(None, ta_lines, tb_lines)
-        ta_idx = 0
-        tb_idx = 0
+        cnt_a = Counter()
+        cnt_b = Counter()
         for block in s.get_matching_blocks():
             (a_idx, b_idx, nmatch) = block
             print("a[%d] and b[%d] match for %d elements" % block)
-            diff_a = ta_lines[ta_idx:a_idx]
-            same_a = ta_lines[a_idx:a_idx + nmatch]
-            diff_b = tb_lines[tb_idx:b_idx]
-            same_b = tb_lines[b_idx:b_idx + nmatch]
+            cnt_a.progress(a_idx, nmatch)
+            cnt_b.progress(b_idx, nmatch)
+            diff_a = cnt_a.slice_diff(ta_lines)
+            same_a = cnt_a.slice_match(ta_lines)
+            diff_b = cnt_b.slice_diff(tb_lines)
+            same_b = cnt_b.slice_match(tb_lines)
 
             if diff_a or diff_b:
                 diff_a, diff_b = self._compare_lines(diff_a, diff_b)
 
-            ta_result.extend(_do_lines(diff_a, same_a, 'a', ta_idx))
-            tb_result.extend(_do_lines(diff_b, same_b, 'b', tb_idx))
+            ta_result.extend(_do_lines(diff_a, same_a, 'a', cnt_a.current))
+            tb_result.extend(_do_lines(diff_b, same_b, 'b', cnt_b.current))
+            diff_lines.append(('adl' + str(cnt_a.current), 'bdl' + str(cnt_b.current)))
 
-            ta_idx = a_idx + nmatch
-            tb_idx = b_idx + nmatch
-            diff_lines.append(('adl' + str(ta_idx), 'bdl' + str(tb_idx)))
+            cnt_a.next()
+            cnt_b.next()
 
         return (linebreak.join(ta_result), linebreak.join(tb_result), diff_lines)
 
