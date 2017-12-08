@@ -23,6 +23,8 @@
 
   <h1>OCR</h1>
 
+  <div id="root"></div>
+
   <div class="panel panel-default">
     <div class="panel-heading">Usage</div>
     <div class="panel-body">
@@ -92,6 +94,7 @@ $(document).ready(function(){
 });
 
 </script>
+<script src="{{ url_for('static', filename='dist/main.bundle.js') }}"></script>
 
 </body>
 </html>

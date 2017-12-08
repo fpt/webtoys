@@ -24,6 +24,8 @@
 
   <h1>{{ s.gettext('sh_pdfconv') }}</h1>
 
+  <div id="root"></div>
+
   <div class="panel panel-default">
     <div class="panel-heading">{{ s.gettext('dh_pdfconv') }}</div>
     <div class="panel-body">
@@ -93,6 +95,8 @@ myInput.addEventListener('change', sendPic, false);
     </div>
   </form>
 </div>
+
+<script src="{{ url_for('static', filename='dist/main.bundle.js') }}"></script>
 
 </body>
 </html>

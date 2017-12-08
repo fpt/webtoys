@@ -16,7 +16,6 @@ from io import StringIO, BytesIO
 from PIL import Image
 
 import logging
-
 logger = logging.getLogger(__name__)
 
 from pdf_ltimage import ImageWriter
@@ -36,15 +35,15 @@ class PdfPage:
         logger.debug(layout)
 
         page_size = (int(layout.width), int(layout.height))
-        #self.ocr_img = Image.new('L', page_size)
+        self.ocr_img = Image.new('L', page_size)
         self.rsrcmgr = rsrcmgr
 
         texts = self._process_layout(layout)
 
         if self.ocr_img and self.any_img:
-            # all images are upside-down. flip it.
             ocr_img = self.ocr_img
-            ocr_img = ocr_img.transpose(Image.FLIP_TOP_BOTTOM)
+            # all images are upside-down. flip it.
+            #ocr_img = ocr_img.transpose(Image.FLIP_TOP_BOTTOM)
 
             result = self._do_ocr(ocr_img, "page.png")
             if result:
@@ -60,10 +59,10 @@ class PdfPage:
         img.save(path)
 
         ocr = Ocr()
-        return None
         rslt = ocr.process(buf)
         logger.debug(rslt)
-        return rslt['results']
+
+        return [PageObj('text', (0, 0, 0, 0), texts = rslt['results'])]
 
 
     def _process_layout(self, layout):
@@ -105,7 +104,7 @@ class PdfPage:
                         nw = int(l.x1 - l.x0)
                         nh = int(l.y1 - l.y0)
                         if nw > 0 and nh > 0 and self.ocr_img:
-                            img = img.resize((nw, nh))
+                            img = img.resize((nw, nh), Image.ANTIALIAS)
                             self.ocr_img.paste(img, (int(l.x0), int(l.y0)))
                             self.any_img = True
                         pobjs.append(PageObj('image', l.bbox, image=img))
@@ -253,10 +252,12 @@ def main():
 
     o = PdfTxt()
     logger.debug(args)
-    #r = o.convert_to_txt(args.infile, prange=range(0,1))
-    r = o.convert_to_doc(args.infile, prange=range(0,1))
-    with open("result.docx", 'wb') as f:
-        f.write(r.read())
+    r = o.convert_to_txt(args.infile, prange=range(0,10))
+    with open("result.txt", 'w') as f:
+        f.write(r)
+    #r = o.convert_to_doc(args.infile, prange=range(0,1))
+    # with open("result.docx", 'wb') as f:
+    #     f.write(r.read())
 
     logger.debug(r)
 

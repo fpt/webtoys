@@ -13,6 +13,8 @@ https://mae.chab.in/archives/2765
 https://codeutopia.net/blog/2016/01/25/getting-started-with-npm-and-browserify-in-a-react-project/
 http://easyreactbook.com/blog/react-fundamentals-configuring-browserify-babelify-and-react
 
+https://cloud.google.com/vision/docs/reference/rest/v1/images/annotate
+
 ## Running Locally
 
 Make sure you have Python [installed properly](http://install.python-guide.org).  Also, install the [Heroku Toolbelt](https://toolbelt.heroku.com/) and [Postgres](https://devcenter.heroku.com/articles/heroku-postgresql#local-setup).
@@ -51,3 +53,10 @@ or
 For more information about using Python on Heroku, see these Dev Center articles:
 
 - [Python on Heroku](https://devcenter.heroku.com/categories/python)
+
+## react router
+
+https://stackoverflow.com/questions/34595890/react-router-undefined-history
+libじゃないが
+https://stackoverflow.com/questions/32816678/react-router-after-adding-createbrowserhistory-the-app-is-not-working-as-expect
+https://github.com/ReactTraining/history

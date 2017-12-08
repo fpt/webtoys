@@ -82,7 +82,7 @@ class ImageWriter(object):
                 mode = 'L'
                 img = Image.frombuffer(mode, image.srcsize, buf.getbuffer(), 'raw', mode, 0, 1)
                 # NOTE: this image is vertically flipped.
-                img = img.transpose(Image.FLIP_TOP_BOTTOM)
+                #img = img.transpose(Image.FLIP_TOP_BOTTOM)
             elif bits == 8:
                 if colorspace[0] == LITERAL_DEVICE_GRAY:
                     mode = 'L'
@@ -118,6 +118,9 @@ class ImageWriter(object):
             fp = BytesIO(tiff_header + data)
             img = Image.open(fp)
 
+            # NOTE: this image is vertically flipped.
+            #img = img.transpose(Image.FLIP_TOP_BOTTOM)
+            img = img.convert('L')
             return (img, path)
         elif isinstance(filters[0], PDFObjRef):
             ref = filters[0]

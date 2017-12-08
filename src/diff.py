@@ -12,6 +12,14 @@ class TextDiff(object):
     def __init__(self):
         pass
 
+    @classmethod
+    def _enclose(cls, pre, s, post, consider_newline = False):
+        if consider_newline:
+            ss = s.split('\n')
+            return '\n'.join([pre + s + post for s in ss])
+        else:
+            return pre + s + post
+
     def _compare_lines(self, la, lb):
         sa = '\n'.join(la)
         sb = '\n'.join(lb)
@@ -32,10 +40,10 @@ class TextDiff(object):
             diff_b = sb[tb_idx:b_idx]
             same_b = sb[b_idx:b_idx + nmatch]
             if diff_a or diff_b:
-                ta_result += str_diff_start + diff_a + str_diff_end
+                ta_result += self._enclose(str_diff_start, diff_a, str_diff_end, consider_newline = True)
             ta_result += same_a
             if diff_a or diff_b:
-                tb_result += str_diff_start + diff_b + str_diff_end
+                tb_result += self._enclose(str_diff_start, diff_b, str_diff_end, consider_newline = True)
             tb_result += same_b
             ta_idx = a_idx + nmatch
             tb_idx = b_idx + nmatch
@@ -51,6 +59,15 @@ class TextDiff(object):
         line_same_start = '<span class="line-num line-same">'
         line_same_end = '</span>'
 
+        def _do_lines(diff, same, block_prefix, idx):
+            result = []
+            if diff:
+                result.append('<div class="diff-block ' + block_prefix + 'dl' + str(idx) + '">')
+                result.extend([self._enclose(line_diff_start, s, line_diff_end) for s in diff])
+                result.append('</div>')
+            result.extend([self._enclose(line_same_start, s, line_same_end) for s in same])
+            return result
+
         s = SequenceMatcher(None, ta_lines, tb_lines)
         ta_idx = 0
         tb_idx = 0
@@ -61,18 +78,13 @@ class TextDiff(object):
             same_a = ta_lines[a_idx:a_idx + nmatch]
             diff_b = tb_lines[tb_idx:b_idx]
             same_b = tb_lines[b_idx:b_idx + nmatch]
+
             if diff_a or diff_b:
                 diff_a, diff_b = self._compare_lines(diff_a, diff_b)
-            if diff_a:
-                ta_result.append('<div class="diff-block adl' + str(ta_idx) + '">')
-                ta_result.extend([line_diff_start + s + line_diff_end for s in diff_a])
-                ta_result.append('</div>')
-            ta_result.extend([line_same_start + s + line_diff_end for s in same_a])
-            if diff_b:
-                tb_result.append('<div class="diff-block bdl' + str(tb_idx) + '">')
-                tb_result.extend([line_diff_start + s + line_diff_end for s in diff_b])
-                tb_result.append('</div>')
-            tb_result.extend([line_same_start + s + line_same_end for s in same_b])
+
+            ta_result.extend(_do_lines(diff_a, same_a, 'a', ta_idx))
+            tb_result.extend(_do_lines(diff_b, same_b, 'b', tb_idx))
+
             ta_idx = a_idx + nmatch
             tb_idx = b_idx + nmatch
             diff_lines.append(('adl' + str(ta_idx), 'bdl' + str(tb_idx)))

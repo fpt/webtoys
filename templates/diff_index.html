@@ -66,6 +66,10 @@ span.line-num:before {
   background-color:#FCC;
 }
 
+.compare-filename {
+  width: 100%;
+}
+
 </style>
 </head>
 
@@ -100,9 +104,11 @@ span.line-num:before {
         <input id="chk-line-toggle" class="btn" type="checkbox">Toggle multiline</button>
       </div>
       <div class="col-sm-6 diff-pane">
+        <input id="left-filename" class="compare-filename" type="text" readonly="readonly" />
         <pre id="left-pane"></pre>
       </div>
       <div class="col-sm-6 diff-pane">
+        <input id="right-filename" class="compare-filename" type="text" readonly="readonly" />
         <pre id="right-pane"></pre>
       </div>
     </div>
@@ -210,6 +216,8 @@ Dropzone.options.diffDropzone = {
 
     $('#left-pane').html(result.left_result)
     $('#right-pane').html(result.right_result)
+    $('#left-filename').val(result.left_filename)
+    $('#right-filename').val(result.right_filename)
     connectDiffBlocks(result.diff_lines);
     diff_lines = result.diff_lines;
   }

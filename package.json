@@ -3,7 +3,12 @@
   "version": "1.0.0",
   "description": "A barebones Python app, which can easily be deployed to Heroku.",
   "main": "app.js",
-  "dependencies": {},
+  "dependencies": {
+    "browserify": "^14.5.0",
+    "history": "^4.7.2",
+    "react-dropzone": "^4.2.3",
+    "react-router": "^4.2.0"
+  },
   "devDependencies": {
     "babel-cli": "^6.26.0",
     "babel-core": "^6.26.0",
