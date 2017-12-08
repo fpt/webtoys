@@ -94,6 +94,8 @@ span.line-num:before {
     </div>
   </div>
 
+  <div id="root"></div>
+
   <div class="panel panel-default">
     <div class="row">
       <div class="col-sm-12">
@@ -237,6 +239,8 @@ $(window).resize(function() {
 </script>
 
 </div>
+
+<script src="{{ url_for('static', filename='dist/main.bundle.js') }}"></script>
 
 </body>
 </html>

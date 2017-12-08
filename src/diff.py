@@ -60,6 +60,7 @@ class TextDiff(object):
             print("a[%d] and b[%d] match for %d elements" % block)
             cnt_a.progress(a_idx, nmatch)
             cnt_b.progress(b_idx, nmatch)
+
             diff_a = cnt_a.slice_diff(sa)
             same_a = cnt_a.slice_match(sa)
             diff_b = cnt_b.slice_diff(sb)
@@ -103,6 +104,7 @@ class TextDiff(object):
             print("a[%d] and b[%d] match for %d elements" % block)
             cnt_a.progress(a_idx, nmatch)
             cnt_b.progress(b_idx, nmatch)
+
             diff_a = cnt_a.slice_diff(ta_lines)
             same_a = cnt_a.slice_match(ta_lines)
             diff_b = cnt_b.slice_diff(tb_lines)
