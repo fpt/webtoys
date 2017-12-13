@@ -231,8 +231,35 @@ def diff_index():
     return render_template('diff_index.html', s = Strings(g.lang_code) )
 
 
+def diff_compare(fn1, body1, fn2, body2):
+    td = TextDiff()
+    file1_rslt, file2_rslt, diff_lines = td.compare(body1, body2)
+
+    res = {
+        'result' : 'ok',
+        'left_filename' : fn1,
+        'left_result' : file1_rslt,
+        'right_filename' : fn2,
+        'right_result' : file2_rslt,
+        'diff_lines' : diff_lines,
+    }
+    return jsonify(res)
+
+
+@app.route('/diff/compare/test01')
+def diff_compare_test01():
+    body1 = """A brown fox
+jumped into
+a pond.""".splitlines()
+    body2 = """A yellow fox
+quickly
+jumped into
+a cave.""".splitlines()
+    return diff_compare('bp', body1, 'yc', body2)
+
+
 @app.route('/diff/compare', methods=["POST"])
-def diff_compare():
+def diff_compare_files():
     def is_docx(file):
         docx_mime = 'application/vnd.openxmlformats-officedocument.wordprocessingml.document'
         return file.filename.endswith('.docx') and file.content_type == docx_mime
@@ -267,18 +294,7 @@ def diff_compare():
         else:
             flash('unsupported.')
 
-        td = TextDiff()
-        file1_rslt, file2_rslt, diff_lines = td.compare(body1, body2)
-
-        res = {
-            'result' : 'ok',
-            'left_filename' : files[0].filename,
-            'left_result' : file1_rslt,
-            'right_filename' : files[1].filename,
-            'right_result' : file2_rslt,
-            'diff_lines' : diff_lines,
-        }
-        return jsonify(res)
+        return diff_compare(files[0].filename, body1, files[1].filename, body2)
 
 
 app.register_blueprint(bp, url_defaults={})

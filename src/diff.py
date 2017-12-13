@@ -90,7 +90,8 @@ class TextDiff(object):
         def _do_lines(diff, same, block_prefix, idx):
             result = []
             if diff:
-                result.append('<div class="diff-block ' + block_prefix + 'dl' + str(idx) + '">')
+                key = block_prefix + 'dl' + str(idx)
+                result.append('<div class="diff-block" key="' + key + '" ref="' + key + '">')
                 result.extend([self._enclose(line_diff_start, s, line_diff_end) for s in diff])
                 result.append('</div>')
             result.extend([self._enclose(line_same_start, s, line_same_end) for s in same])
