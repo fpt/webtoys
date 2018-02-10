@@ -3,7 +3,7 @@
 
 import sys,os
 import socket
-from flask import Flask, Blueprint, g,render_template, make_response, jsonify, send_file
+from flask import Flask, Blueprint, g,render_template, make_response, jsonify, send_file, send_from_directory
 from flask import request, redirect
 from flask import Response
 from io import BytesIO
@@ -54,8 +54,8 @@ def index():
 
 
 # HTTP Header
-@bp.route('/hhdr', methods=["GET"])
-def hhdr_index():
+@bp.route('/api/httpheader', methods=["GET"])
+def httpheader_api():
 
     headers = { k : v for (k, v) in request.headers.items() }
 
@@ -71,15 +71,12 @@ def hhdr_index():
     except:
         pass
 
-    return render_template('hhdr_index.html',
-            remote_addr=remote_addr,
-            remote_host=remote_host,
-            headers=headers )
-
-# base64
-@bp.route('/base', methods=["GET"])
-def base_index():
-    return render_template('base_index.html', s = Strings(g.lang_code) )
+    obj = {
+        'remote_addr' : remote_addr,
+        'remote_host' : remote_host,
+        'headers' : headers
+    }
+    return jsonify(obj)
 
 
 # url encode
@@ -99,8 +96,9 @@ def xmlbt_index():
     return render_template('xmlbt_index.html', s = Strings(g.lang_code) )
 
 
-@app.route('/xmlbt/beautify', methods=['POST'])
+@app.route('/api/xmlbeautify', methods=['POST'])
 def xmlbt_beautify():
+    print(request.form.get('original'))
     orig = request.form['original']
     b = XmlBt()
     r = b.beautify(orig)
@@ -297,10 +295,31 @@ def diff_compare_files():
         return diff_compare(files[0].filename, body1, files[1].filename, body2)
 
 
+@bp.route('/httpheader', methods=["GET"])
+def httpheader_page():
+    return render_template('index.html', s = Strings(g.lang_code))
+
+@bp.route('/baseconv', methods=["GET"])
+def baseconv_page():
+    return render_template('index.html', s = Strings(g.lang_code))
+
+@bp.route('/xmlbeautify', methods=["GET"])
+def xmlbeautify_page():
+    return render_template('index.html', s = Strings(g.lang_code))
+
+
 app.register_blueprint(bp, url_defaults={})
 app.register_blueprint(bp, url_prefix='/ja', url_defaults={'lang': 'ja'})
 #print(app.url_map)
 
+@app.route('/dist/<path:filename>')
+def serve_dist(filename):
+    return send_from_directory('dist', filename)
+
+@app.errorhandler(404)
+def page_not_found(e):
+    return render_template('index.html', s = Strings(g.lang_code))
+    # return redirect("/", code=302)
 
 if __name__ == '__main__':
     port = int(os.environ.get("PORT", 5000))

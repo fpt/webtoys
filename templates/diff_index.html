@@ -6,9 +6,7 @@
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link href="{{ url_for('static', filename='css/bootstrap.min.css') }}" rel="stylesheet" media="screen">
-  <link href="{{ url_for('static', filename='css/bootstrap-theme.min.css') }}" rel="stylesheet" media="screen">
-  <link rel="stylesheet" href="{{ url_for('static', filename='css/dropzone.css') }}">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/latest/css/bootstrap.min.css">
 <style>
 .diff-pane {
   background-color: #fff;
@@ -55,19 +53,9 @@ span.line-num:before {
   color: #888
 }
 
-.rel-line {
-  position:absolute;
-  width:2px;
-  background-color:#F88;
-} 
-
 .diff-block {
   display: block;
   background-color:#FCC;
-}
-
-.compare-filename {
-  width: 100%;
 }
 
 </style>
@@ -75,28 +63,7 @@ span.line-num:before {
 
 <body>
 
-<ol class="breadcrumb">
-  <li><a href="{{ url_for('top.index') }}">{{ s.gettext('site_title') }} {{ s.gettext('nav_top') }}</a></li>
-  <li class="active">{{ s.gettext('sh_diff') }}</li>
-</ol>
-
-<div class="container">
-  <script src="http://code.jquery.com/jquery.js"></script>
-  <script src="{{ url_for('static', filename='js/bootstrap.min.js') }}"></script>
-
-  <h1>{{ s.gettext('sh_diff') }}</h1>
-
-  <div class="panel panel-default">
-    <div class="panel-heading">{{ s.gettext('dh_diff') }}</div>
-    <div class="panel-body">
-      {{ s.gettext('dd_diff') }}
-    </div>
-  </div>
-
-  <div id="root"></div>
-
-</div>
-
+<div id="root" class="container"></div>
 <script src="{{ url_for('static', filename='dist/main.bundle.js') }}"></script>
 
 </body>

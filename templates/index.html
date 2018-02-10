@@ -9,24 +9,17 @@
   <meta name="description" content="HTTP header, Base64, URL encode/decode, Unicode escape/unescape, ID generator">
   <link href="{{ url_for('static', filename='css/bootstrap.min.css') }}" rel="stylesheet" media="screen">
   <link href="{{ url_for('static', filename='css/bootstrap-theme.min.css') }}" rel="stylesheet" media="screen">
+  <link href="{{ url_for('serve_dist', filename='style.css') }}" rel="stylesheet" media="screen">
   <link rel="manifest" href="static/manifest.json">
 </head>
 
 <body>
 
-<!-- Facebook -->
-<div id="fb-root"></div>
-<script>(function(d, s, id) {
-  var js, fjs = d.getElementsByTagName(s)[0];
-  if (d.getElementById(id)) return;
-  js = d.createElement(s); js.id = id;
-  js.src = "//connect.facebook.net/en_US/sdk.js#xfbml=1&version=v2.6&appId=287278864750021";
-  fjs.parentNode.insertBefore(js, fjs);
-}(document, 'script', 'facebook-jssdk'));</script>
+<div id="app-root"></div>
 
-<ol class="breadcrumb">
-  <li class="active">{{ s.gettext('nav_top') }}</li>
-</ol>
+<hr/>
+
+<!-- Facebook -->
 
 <div class="container">
   <h1>{{ s.gettext('site_title') }}</h1>
@@ -44,11 +37,6 @@
 
   <div class="row">
     <div class="col-md-4">
-      <h3>{{ s.gettext('sh_hhdr') }}</h3>
-      <p>{{ s.gettext('sd_hhdr') }}</p>
-      <p><a class="btn btn-primary" href="{{ url_for('top.hhdr_index') }}" role="button">Go</a></p>
-    </div>
-    <div class="col-md-4">
       <h3>{{ s.gettext('sh_urle') }}</h3>
       <p>{{ s.gettext('sd_urle') }}</p>
       <p><a class="btn btn-primary" href="{{ url_for('top.urle_index') }}" role="button">Go</a></p>
@@ -57,16 +45,6 @@
       <h3>{{ s.gettext('sh_unie') }}</h3>
       <p>{{ s.gettext('sd_unie') }}</p>
       <p><a class="btn btn-primary" href="{{ url_for('top.unie_index') }}" role="button">Go</a></p>
-    </div>
-    <div class="col-md-4">
-      <h3>{{ s.gettext('sh_base') }}</h3>
-      <p>{{ s.gettext('sd_base') }}</p>
-      <p><a class="btn btn-primary" href="{{ url_for('top.base_index') }}" role="button">Go</a></p>
-    </div>
-    <div class="col-md-4">
-      <h3>{{ s.gettext('sh_xmlbt') }}</h3>
-      <p>{{ s.gettext('sd_xmlbt') }}</p>
-      <p><a class="btn btn-primary" href="{{ url_for('top.xmlbt_index') }}" role="button">Go</a></p>
     </div>
     <div class="col-md-4">
       <h3>{{ s.gettext('sh_ids') }}</h3>
@@ -92,7 +70,8 @@
 
   <hr/>
 
-  <script src="{{ url_for('static', filename='dist/main.bundle.js') }}"></script>
+  <div id="app-root"></div>
+  <script src="{{ url_for('serve_dist', filename='bundle.js') }}"></script>
   <div class="fb-like" data-href="http://webtoys.herokuapp.com" data-layout="standard" data-action="like" data-show-faces="true" data-share="true"></div>
 
 </div>
