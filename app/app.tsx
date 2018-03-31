@@ -5,11 +5,11 @@ import { PageHeader, Button, Col, Breadcrumb, ToggleButtonGroup, ToggleButton } 
 import Dropzone from 'react-dropzone';
 import { lifecycle, withState } from 'recompose';
 
-import { HttpHeaderView } from './httpheader';
-import { BaseConvView } from './baseconv';
-import { XmlBeautifyView } from './xmlbeautify';
-import { UrlEncView } from './urlenc';
-import { IdGenView } from './idgen';
+import { HttpHeaderView } from './components/httpheader';
+import { BaseConvView } from './components/baseconv';
+import { XmlBeautifyView } from './components/xmlbeautify';
+import { UrlEncView } from './components/urlenc';
+import { IdGenView } from './components/idgen';
 
 
 const Header = () => {
